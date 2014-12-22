@@ -5,8 +5,14 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 class RegoCheck extends Controller {
+	/**
+	 * @var
+	 */
 	protected $webClient;
 
+	/**
+	 * @var
+	 */
 	protected $apiClient;
 
 	public function __construct() {
@@ -15,15 +21,26 @@ class RegoCheck extends Controller {
 		$this->apiClient = new Client();
 	}
 
+	/**
+	 * @param string $state
+	 * @param string $plate
+	 * @return string|Crawler
+	 * @throws Exception
+	 */
 	public function stateSwitch($state, $plate) {
 		switch ($state) {
 			case 'wa' :
-				return $this->waRegoCheck($plate);
+				return $this->_waRegoCheck($plate);
 			break;
 		}
 	}
 
-	public function waRegoCheck($plate) {
+	/**
+	 * @param string $plate
+	 * @return string|Crawler
+	 * @throws Exception
+	 */
+	public function _waRegoCheck($plate) {
 		$sessionRequest = $this->webClient->createRequest('GET', 'https://online.transport.wa.gov.au/webExternal/registration/?');
 
 		$sessionResponse = $this->webClient->send($sessionRequest);
@@ -50,8 +67,6 @@ class RegoCheck extends Controller {
 			}
 		}
 
-		//dd($apiResponse->getBody());
-
 		if (is_object($apiResponse)) {
 			$apiResponseBody = $apiResponse->getBody();
 
@@ -74,6 +89,8 @@ class RegoCheck extends Controller {
 			}
 
 			return $expiryResults;
+		} else {
+			throw new Exception('An unknown error occured');
 		}
 	}
 }
