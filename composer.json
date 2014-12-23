@@ -1,8 +1,6 @@
 {
-	"name": "laravel/laravel",
-	"description": "The Laravel Framework.",
-	"keywords": ["framework", "laravel"],
-	"license": "MIT",
+	"name": "yesdevnull/regocheck",
+	"description": "Tool to check when your car/bike/truck registration is expiring in Western Australia.",
 	"type": "project",
 	"require": {
 		"laravel/framework": "4.2.*",
