@@ -78,7 +78,7 @@ class RegoCheck extends Controller {
 				if ($apiExpiryBody->filter('.section-body p strong span')->first()->text()) {
 					throw new Exception('Unable to locate plate: ' . $plate);
 				} else {
-					throw new Exception('An unknown error occured');
+					throw new Exception('An unknown error occurred');
 				}
 			} else {
 				$expiryResults = $expiryResults->text();
@@ -90,7 +90,7 @@ class RegoCheck extends Controller {
 
 			return $expiryResults;
 		} else {
-			throw new Exception('An unknown error occured');
+			throw new Exception('An unknown error occurred');
 		}
 	}
 }
