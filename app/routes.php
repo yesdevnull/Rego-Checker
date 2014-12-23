@@ -13,9 +13,5 @@
 
 Route::get('/', function()
 {
-	$plate = '';
-
-	$checker = new RegoCheck;
-
-	dd($checker->stateSwitch('wa', $plate));
+	return View::make('home');
 });
