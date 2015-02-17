@@ -72,7 +72,7 @@ class RegoCheck extends Controller {
 
 			$apiExpiryBody = new Crawler($apiResponseBody->getContents());
 
-			$expiryResults = $apiExpiryBody->filter('div.licensing-big-form .data span')->eq(1);
+			$expiryResults = $apiExpiryBody->filter('div.licensing-big-form .data')->eq(1);
 
 			if (count($expiryResults) == 0) {
 				if ($apiExpiryBody->filter('.section-body p strong span')->first()->text()) {
@@ -84,9 +84,11 @@ class RegoCheck extends Controller {
 				$expiryResults = $expiryResults->text();
 			}
 
-			if (!preg_match("/[0-3][0-9]\/[0-1][0-9]\/[1-2][0-9]{3}/i", $expiryResults)) {
-				throw new Exception('Invalid date returned');
-			}
+			if (preg_match('#unregistered#', $expiryResults)) {
+                throw new Exception(sprintf('Plate "%s" is unregistered, expired, suspended or cancelled', $plate));
+            } elseif (!preg_match("/[0-3][0-9]\/[0-1][0-9]\/[1-2][0-9]{3}/i", $expiryResults)) {
+                throw new Exception('Invalid date returned');
+            }
 
 			return $expiryResults;
 		} else {
