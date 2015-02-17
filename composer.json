@@ -3,11 +3,11 @@
 	"description": "Tool to check when your car/bike/truck registration is expiring in Western Australia.",
 	"type": "project",
 	"require": {
-		"laravel/framework": "4.2.*",
+		"laravel/framework": "~5.0",
 	  	"guzzlehttp/guzzle": "~5.0"
 	},
   	"require-dev": {
-		"barryvdh/laravel-ide-helper": "~1.11"
+		"barryvdh/laravel-ide-helper": "~2.0"
 	},
 	"autoload": {
 		"classmap": [
