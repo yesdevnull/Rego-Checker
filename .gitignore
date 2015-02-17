@@ -11,3 +11,4 @@ _ide_helper.php
 .idea
 node_modules
 npm-debug.log
+public/dist
