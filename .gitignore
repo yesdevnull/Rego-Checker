@@ -9,3 +9,5 @@ Thumbs.db
 atlassian-ide-plugin.xml
 _ide_helper.php
 .idea
+node_modules
+npm-debug.log
