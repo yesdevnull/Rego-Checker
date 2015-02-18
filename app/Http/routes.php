@@ -2,7 +2,7 @@
 
 Route::get('/', function()
 {
-    return 'home';
+    return View::make('home');
 });
 
 Route::group(['prefix' => 'api'], function() {
