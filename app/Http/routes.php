@@ -10,5 +10,9 @@ Route::group(['prefix' => 'api'], function() {
         Route::get('/', function() {
             return 'hello';
         });
+
+        Route::post('/plate', function() {
+            return response()->json(['response' => 'you POSTed plate: ' . Input::get('plate')]);
+        });
     });
 });

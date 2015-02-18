@@ -19,7 +19,8 @@ require.config({
         jquery: "$",
         underscore: "_",
         react: "React",
-        JSXTransformer: "JSXTransformer"
+        JSXTransformer: "JSXTransformer",
+        text: "text"
     },
     jsx: {
         fileExtension: ".jsx",
@@ -31,8 +32,6 @@ require.config({
     }
 });
 
-require(['jsx!app'], function(App) {
-    var app = new App();
+require(['jsx!app'], function() {
 
-    app.init();
 });
