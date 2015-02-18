@@ -1,9 +1,12 @@
 require.config({
     paths: {
         react: 'lib/react',
+        JSXTransformer: 'lib/JSXTransformer',
         jquery: 'lib/jquery',
         backbone: 'lib/backbone',
-        underscore: 'lib/underscore'
+        underscore: 'lib/underscore',
+        jsx: 'lib/jsx',
+        text: 'lib/text'
     },
     shim: {
         backbone: {
@@ -13,15 +16,23 @@ require.config({
             ],
             exports: "Backbone"
         },
-        jquery: {
-            exports: "$"
+        jquery: "$",
+        underscore: "_",
+        react: "React",
+        JSXTransformer: "JSXTransformer"
+    },
+    jsx: {
+        fileExtension: ".jsx",
+        transformOptions: {
+            harmony: true,
+            stripTypes: false
         },
-        underscore: {
-            "exports": "_"
-        }
+        usePragma: false
     }
 });
 
-require(['app'], function() {
-    console.log('App loaded');
+require(['jsx!app'], function(App) {
+    var app = new App();
+
+    app.init();
 });

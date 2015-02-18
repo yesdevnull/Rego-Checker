@@ -2,8 +2,12 @@ module.exports = function(grunt) {
     grunt.initConfig({
         uglify: {
             react: {
-                src: 'node_modules/react/dist/react.js',
+                src: 'bower_components/react/react-with-addons.js',
                 dest: 'resources/assets/js/lib/react.js'
+            },
+            jsxtransformer: {
+                src: 'bower_components/react/JSXTransformer.js',
+                dest: 'resources/assets/js/lib/JSXTransformer.js'
             },
             backbone: {
                 src: 'node_modules/backbone/backbone.js',
@@ -12,6 +16,14 @@ module.exports = function(grunt) {
             underscore: {
                 src: 'node_modules/underscore/underscore.js',
                 dest: 'resources/assets/js/lib/underscore.js'
+            },
+            jsx: {
+                src: 'bower_components/requirejs-react-jsx/jsx.js',
+                dest: 'resources/assets/js/lib/jsx.js'
+            },
+            tools: {
+                src: 'bower_components/requirejs-text/text.js',
+                dest: 'resources/assets/js/lib/text.js'
             },
             extras: {
                 options: {
@@ -52,4 +64,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     grunt.registerTask('build', ['uglify', 'requirejs:dev']);
+    grunt.registerTask('app', ['requirejs:dev']);
 };
