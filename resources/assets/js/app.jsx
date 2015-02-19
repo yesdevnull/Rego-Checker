@@ -15,7 +15,7 @@ require(['react', 'jquery'], function (React) {
                         dataType: 'json',
                         type: 'POST',
                         beforeSend: function (xhr) {
-                            token = $('meta[name="csrf_token_alt"]').attr('content');
+                            token = $('meta[name="csrf_token"]').attr('content');
 
                             if (token) {
                                 return xhr.setRequestHeader('X-XSRF-TOKEN', token);
