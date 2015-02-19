@@ -5,29 +5,36 @@ require(['react', 'jquery'], function (React) {
     (function () {
         'use strict';
 
-        var PlatesApp = React.createClass({
+        var Plates = React.createClass({
             handlePlateSearch: function (plate) {
                 var token;
 
-                $.ajax({
-                    url: apiRoot + 'plate',
-                    dataType: 'json',
-                    type: 'POST',
-                    beforeSend: function(xhr) {
-                        token = $('meta[name="csrf_token"]').attr('content');
+                this.setState({ response: 'Fetching...', type: 'info' }, function () {
+                    $.ajax({
+                        url: apiRoot + 'plate',
+                        dataType: 'json',
+                        type: 'POST',
+                        beforeSend: function (xhr) {
+                            token = $('meta[name="csrf_token_alt"]').attr('content');
 
-                        if (token) {
-                            return xhr.setRequestHeader('X-XSRF-TOKEN', token);
-                        }
-                    },
-                    data: plate,
-                    success: function(data) {
-                        console.log(data);
-                    }.bind(this),
-                    error: function(xhr, status, err) {
-                        console.error(this.props.url, status, err.toString());
-                    }.bind(this)
+                            if (token) {
+                                return xhr.setRequestHeader('X-XSRF-TOKEN', token);
+                            }
+                        },
+                        data: plate,
+                        success: function (data) {
+                            this.setState({ response: data.response.message, type: data.response.status });
+                        }.bind(this),
+                        error: function (xhr, status, err) {
+                            console.error('Error!');
+                            console.error(xhr);
+                            console.error(this.props.url, status, err.toString());
+                        }.bind(this)
+                    });
                 });
+            },
+            getInitialState: function () {
+                return { response: '', type: '' };
             },
             render: function () {
                 return (
@@ -36,14 +43,44 @@ require(['react', 'jquery'], function (React) {
                             <h1>Rego Search</h1>
 
                             <PlateForm onPlateSubmit={this.handlePlateSearch} />
+                            <PlateResponse response={this.state.response} type={this.state.type} />
                         </header>
                     </div>
                 );
             }
         });
 
+        var PlateResponse = React.createClass({
+            processResponseType: function(type, message) {
+                switch (type) {
+                    case 'success' :
+                        return message;
+                    break;
+
+                    case 'warning' :
+                        return 'Warning!  ' + message;
+                    break;
+
+                    case 'error' :
+                        return 'Error: ' + message;
+                    break;
+
+                    case 'info' :
+                        return 'Info: ' + message;
+                    break;
+                }
+            },
+            render: function () {
+                var niceResponse = this.processResponseType(this.props.type, this.props.response);
+
+                return (
+                    <p>{niceResponse}</p>
+                );
+            }
+        });
+
         var PlateForm = React.createClass({
-            handleSubmit: function(e) {
+            handleSubmit: function (e) {
                 e.preventDefault();
 
                 var plateNumber = this.refs.plate.getDOMNode().value.trim();
@@ -66,7 +103,7 @@ require(['react', 'jquery'], function (React) {
 
         function render () {
             React.render(
-                <PlatesApp />,
+                <Plates />,
                 document.getElementById('view')
             );
         }
