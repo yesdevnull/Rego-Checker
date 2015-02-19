@@ -2,7 +2,6 @@
 
 use Closure;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
-use Symfony\Component\Security\Core\Util\StringUtils;
 
 class VerifyCsrfToken extends BaseVerifier {
 
@@ -17,15 +16,4 @@ class VerifyCsrfToken extends BaseVerifier {
 	{
 		return parent::handle($request, $next);
 	}
-
-    protected function tokensMatch($request)
-    {
-        $token = $request->session()->token();
-
-        $header = $request->header('X-XSRF-TOKEN');
-
-        return StringUtils::equals($token, $request->input('_token')) ||
-               ($header && StringUtils::equals($token, $header));
-    }
-
 }
