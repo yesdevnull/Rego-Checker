@@ -86,21 +86,21 @@ class RegoCheck extends Controller {
 
 			if (count($expiryResults) == 0) {
 				if ($apiExpiryBody->filter('.section-body p strong span')->first()->text()) {
-					throw new Exception('Unable to locate plate: ' . $plate);
+                    return ['status' => 'error', 'message' => sprintf('Unable to locate plate %s', $plate)];
 				} else {
-					throw new Exception('An unknown error occurred');
+                    return ['status' => 'error', 'message' => 'Unable to scrape registration details from DoT'];
 				}
 			} else {
 				$expiryResults = $expiryResults->text();
 			}
 
 			if (preg_match('#unregistered#', $expiryResults)) {
-                throw new Exception(sprintf('Plate "%s" is unregistered, expired, suspended or cancelled', $plate));
-            } elseif (!preg_match("/[0-3][0-9]\/[0-1][0-9]\/[1-2][0-9]{3}/i", $expiryResults)) {
-                throw new Exception('Invalid date returned');
+                return ['status' => 'warning', 'message' => sprintf('Plate "%s" is unregistered, expired, suspended or cancelled', $plate)];
+            } elseif (!preg_match('/[0-3][0-9]\/[0-1][0-9]\/[1-2][0-9]{3}/i', $expiryResults)) {
+                return ['status' => 'warning', 'message' => 'Invalid data scraped from DoT'];
             }
 
-			return $expiryResults;
+			return ['status' => 'success', 'message' => sprintf('Plate expires on %s', $expiryResults)];
 		} else {
 			throw new Exception('An unknown error occurred');
 		}
