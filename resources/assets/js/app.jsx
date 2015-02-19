@@ -7,11 +7,20 @@ require(['react', 'jquery'], function (React) {
 
         var PlatesApp = React.createClass({
             handlePlateSearch: function (plate) {
+                var token;
+
                 $.ajax({
                     url: apiRoot + 'plate',
                     dataType: 'json',
                     type: 'POST',
-                    data: plate ,
+                    beforeSend: function(xhr) {
+                        token = $('meta[name="csrf_token"]').attr('content');
+
+                        if (token) {
+                            return xhr.setRequestHeader('X-XSRF-TOKEN', token);
+                        }
+                    },
+                    data: plate,
                     success: function(data) {
                         console.log(data);
                     }.bind(this),
@@ -44,7 +53,6 @@ require(['react', 'jquery'], function (React) {
                 }
 
                 this.props.onPlateSubmit({ plate: plateNumber });
-                this.refs.plate.getDOMNode().value = '';
             },
             render: function () {
                 return (

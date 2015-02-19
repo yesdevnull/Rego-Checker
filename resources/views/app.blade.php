@@ -2,6 +2,7 @@
     <html lang="en" data-framework="react">
         <head>
             <meta charset="utf-8" />
+            <meta name="csrf_token" content="{{ csrf_token() }}" />
         </head>
 
         <body>
