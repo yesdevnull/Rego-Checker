@@ -12,7 +12,11 @@ Route::group(['prefix' => 'api'], function() {
         });
 
         Route::post('/plate', function() {
-            return response()->json(['response' => 'you POSTed plate: ' . Input::get('plate')]);
+            $checker = new RegoCheck;
+
+            $plateCheck = $checker->plateCheck('wa', Input::get('plate'));
+
+            return response()->json(['response' => $plateCheck]);
         });
     });
 });

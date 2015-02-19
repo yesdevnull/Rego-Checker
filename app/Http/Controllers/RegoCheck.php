@@ -4,6 +4,9 @@ use Symfony\Component\DomCrawler\Crawler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
+/**
+ * Class RegoCheck
+ */
 class RegoCheck extends Controller {
 	/**
 	 * @var
@@ -15,11 +18,18 @@ class RegoCheck extends Controller {
 	 */
 	protected $apiClient;
 
+    /**
+     * Constructor
+     */
 	public function __construct() {
 		$this->webClient = new Client();
 
 		$this->apiClient = new Client();
 	}
+
+    public function plateCheck($state, $plate) {
+        return $this->stateSwitch($state, $plate);
+    }
 
 	/**
 	 * @param string $state
