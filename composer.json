@@ -6,7 +6,8 @@
     "laravel/framework": "5.0.*",
     "guzzlehttp/guzzle": "~5.0",
     "symfony/dom-crawler": "2.6.*",
-    "symfony/css-selector": "2.6.*"
+    "symfony/css-selector": "2.6.*",
+    "barryvdh/laravel-debugbar": "~2.0"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "~2.0",
