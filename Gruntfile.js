@@ -57,12 +57,29 @@ module.exports = function(grunt) {
                     generateSourceMaps: true
                 }
             }
+        },
+        watch: {
+            js_app: {
+                files: ['resources/assets/js/app.jsx'],
+                tasks: 'requirejs:dev'
+            }
+        },
+        notify_hooks: {
+            options: {
+                enabled: true,
+                success: true,
+                title: 'Plates'
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-notify');
 
     grunt.registerTask('build', ['uglify', 'requirejs:dev']);
     grunt.registerTask('app', ['requirejs:dev']);
+
+    grunt.task.run('notify_hooks');
 };
