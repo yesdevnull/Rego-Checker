@@ -7,15 +7,13 @@ require(['react', 'jquery'], function (React) {
 
         var Plates = React.createClass({
             handlePlateSearch: function (plate) {
-                var token;
-
                 this.setState({ response: 'Fetching...', type: 'info' }, function () {
                     $.ajax({
                         url: apiRoot + 'plate',
                         dataType: 'json',
                         type: 'POST',
                         beforeSend: function (xhr) {
-                            token = $('meta[name="csrf_token"]').attr('content');
+                            var token = $('meta[name="csrf_token"]').attr('content');
 
                             if (token) {
                                 return xhr.setRequestHeader('X-XSRF-TOKEN', token);
