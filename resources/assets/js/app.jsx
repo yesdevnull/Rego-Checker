@@ -83,11 +83,12 @@ require(['react', 'jquery'], function (React) {
 
                 var plateNumber = this.refs.plate.getDOMNode().value.trim();
 
-                if (!plateNumber) {
+                if (!plateNumber || (app.previousPlate == plateNumber)) {
                     return;
                 }
 
                 this.props.onPlateSubmit({ plate: plateNumber });
+                app.previousPlate = plateNumber;
             },
             render: function () {
                 return (
