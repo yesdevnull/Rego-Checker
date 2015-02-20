@@ -1,9 +1,10 @@
-require(['react', 'jquery'], function (React) {
+require(['react', 'router', 'jquery'], function (React, Router, $) {
     var app = app || {},
         apiRoot = '/api/v1/';
 
     (function () {
         'use strict';
+
 
         var Plates = React.createClass({
             handlePlateSearch: function (plate) {

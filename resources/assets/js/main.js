@@ -1,6 +1,7 @@
 require.config({
     paths: {
         react: 'lib/react',
+        router: 'lib/router',
         JSXTransformer: 'lib/JSXTransformer',
         jquery: 'lib/jquery',
         backbone: 'lib/backbone',
@@ -19,6 +20,7 @@ require.config({
         jquery: "$",
         underscore: "_",
         react: "React",
+        router: "Router",
         JSXTransformer: "JSXTransformer",
         text: "text"
     },
