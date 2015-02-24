@@ -25,7 +25,11 @@ require(['react', 'router', 'jquery'], function (React, Router, $) {
                             </ul>
                         </header>
 
-                        <RouteHandler />
+                        <section className="content">
+                            <RouteHandler />
+                        </section>
+
+                        <FooterContainer />
                     </div>
                 );
             }
@@ -35,7 +39,7 @@ require(['react', 'router', 'jquery'], function (React, Router, $) {
             render: function () {
                 return (
                     <div>
-                        <h1>Home</h1>
+                        <h1>Home!</h1>
                     </div>
                 );
             }
@@ -83,8 +87,6 @@ require(['react', 'router', 'jquery'], function (React, Router, $) {
             render: function () {
                 return (
                     <div>
-                        <h1>Rego Search</h1>
-
                         <PlateSearchForm onPlateSubmit={this.handlePlateSearch} />
                         <PlateSearchResponse response={this.state.response} type={this.state.type} />
                     </div>
@@ -138,8 +140,32 @@ require(['react', 'router', 'jquery'], function (React, Router, $) {
                 return (
                     <form className="plateForm" onSubmit={this.handleSubmit}>
                         <input type="text" placeholder="Plate #" ref="plate" />
-                        <input type="submit" value="Plate" />
+                        <input type="submit" value="Search" />
+                        <p className="lawsuits"><strong>Note:</strong> I can't guarantee this data is correct.</p>
                     </form>
+                );
+            }
+        });
+
+        var FooterContainer = React.createClass({
+            shouldComponentUpdate: function () {
+                return false;
+            },
+            render: function () {
+                return (
+                    <footer>
+                        <FooterBox />
+                    </footer>
+                );
+            }
+        });
+
+        var FooterBox = React.createClass({
+            render: function () {
+                return (
+                    <p>
+                        Brought to you by <a href="https://www.yesdevnull.net">Dan Barrett</a> &middot; <a href="https://github.com/yesdevnull/Rego-Checker">View on GitHub</a>
+                    </p>
                 );
             }
         });

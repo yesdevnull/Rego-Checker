@@ -7,6 +7,7 @@
 @import "susy";
 @import "sassy-maps/sass/sassy-maps";
 @import "breakpoint-sass/stylesheets/breakpoint";
+@import "bourbon/bourbon";
 
 $tablet: 768px;
 $desktop: 992px;
@@ -21,6 +22,9 @@ $susy: (
 @include border-box-sizing;
 
 body {
+  font-family: 'Open Sans', Verdana, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
   background-color: #f6f6f6;
 }
 
@@ -28,17 +32,55 @@ body {
   @include container;
 }
 
+a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: 700;
+  font-style: normal;
+}
+
 #view {
   @include span(12);
-  background-color: #cccccc;
+  background-color: #ccc;
 }
 
 #nav {
   @include span(full);
+  line-height: 30px;
 
   li {
     display: inline-block;
     text-align: center;
     width: 33.33333%;
   }
+}
+
+.content {
+  @include span(12);
+  @include padding(30px null);
+}
+
+form {
+  text-align: center;
+
+  input {
+    font-size: 18px;
+
+  }
+}
+
+.lawsuits {
+  font-size: 13px;
+  font-style: italic;
+}
+
+footer {
+  text-align: center;
 }
