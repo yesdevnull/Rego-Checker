@@ -1,4 +1,6 @@
 module.exports = function(grunt) {
+    require('load-grunt-tasks')(grunt);
+
     grunt.initConfig({
         uglify: {
             react: {
@@ -67,12 +69,27 @@ module.exports = function(grunt) {
                 sassDir: 'resources/assets/css/',
                 cssDir: 'public/dist/css/',
                 require: 'susy'
+            },
+            dev: {
+                options: {
+                    sourcemap: true,
+                    outputStyle: 'nested',
+                    watch: true
+                }
             }
         },
         watch: {
             js_app: {
                 files: ['resources/assets/js/app.jsx'],
                 tasks: 'requirejs:dev'
+            }
+        },
+        concurrent: {
+            dev: {
+                tasks: ['watch', 'compass:dev'],
+                options: {
+                    logConcurrentOutput: true
+                }
             }
         },
         notify_hooks: {
@@ -92,6 +109,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', ['uglify', 'requirejs:dev']);
     grunt.registerTask('app', ['requirejs:dev']);
+    grunt.registerTask('focus', ['concurrent:dev']);
 
     grunt.task.run('notify_hooks');
 };
