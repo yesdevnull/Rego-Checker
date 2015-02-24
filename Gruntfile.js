@@ -6,7 +6,7 @@ module.exports = function(grunt) {
                 dest: 'resources/assets/js/lib/react.js'
             },
             router: {
-                src: 'bower_components/react-router/dist/react-router.js',
+                src: 'bower_components/react-router/build/global/ReactRouter.js',
                 dest: 'resources/assets/js/lib/router.js'
             },
             jsxtransformer: {
