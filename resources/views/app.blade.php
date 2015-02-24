@@ -8,9 +8,9 @@
         </head>
 
         <body>
-            <section id="view">
-
-            </section>
+            <div class="wrap">
+                <section id="view"></section>
+            </div>
 
             <script data-main="{{ asset('dist/js/main.min.js') }}" src="{{ asset('dist/js/_require.min.js') }}"></script>
         </body>
