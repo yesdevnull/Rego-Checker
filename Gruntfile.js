@@ -5,6 +5,10 @@ module.exports = function(grunt) {
                 src: 'bower_components/react/react-with-addons.js',
                 dest: 'resources/assets/js/lib/react.js'
             },
+            router: {
+                src: 'bower_components/react-router/dist/react-router.js',
+                dest: 'resources/assets/js/lib/router.js'
+            },
             jsxtransformer: {
                 src: 'bower_components/react/JSXTransformer.js',
                 dest: 'resources/assets/js/lib/JSXTransformer.js'

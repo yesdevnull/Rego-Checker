@@ -1,8 +1,6 @@
 <?php namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Crypt;
-use View;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -13,9 +11,7 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-        $encrypted_csrf_token = Crypt::encrypt(csrf_token());
-
-        view()->share('encrypted_csrf_token', $encrypted_csrf_token);
+        //
 	}
 
 	/**

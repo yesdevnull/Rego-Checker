@@ -2,7 +2,9 @@
 
 Route::get('/', function()
 {
-    return view('home');
+    $encrypted_csrf_token = Crypt::encrypt(csrf_token());
+
+    return view('home')->withEncryptedCsrfToken($encrypted_csrf_token);
 });
 
 Route::group(['prefix' => 'api'], function() {

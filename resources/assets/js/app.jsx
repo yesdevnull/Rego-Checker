@@ -1,21 +1,62 @@
-require(['react', 'jquery'], function (React) {
+require(['react', 'router', 'jquery'], function (React, Router, $) {
     var app = app || {},
         apiRoot = '/api/v1/';
 
     (function () {
         'use strict';
 
-        var Plates = React.createClass({
-            handlePlateSearch: function (plate) {
-                var token;
+        var DefaultRoute = Router.DefaultRoute;
+        var Link = Router.Link;
+        var Route = Router.Route;
+        var RouteHandler = Router.RouteHandler;
 
+        var PlatesApp = React.createClass({
+            render: function () {
+                return (
+                    <div>
+                        <header>
+                            <ul>
+                                <li><Link to="home">Home</Link></li>
+                                <li><Link to="search">Search</Link></li>
+                                <li><Link to="notify">Notify</Link></li>
+                            </ul>
+                        </header>
+
+                        <RouteHandler />
+                    </div>
+                );
+            }
+        });
+
+        var PlateHome = React.createClass({
+            render: function () {
+                return (
+                    <div>
+                        <h1>Home</h1>
+                    </div>
+                );
+            }
+        });
+
+        var PlateNotify = React.createClass({
+            render: function () {
+                return (
+                    <div>
+                        <h1>Notify</h1>
+                    </div>
+                )
+            }
+        });
+
+        var PlateSearch = React.createClass({
+            handlePlateSearch: function (plate) {
                 this.setState({ response: 'Fetching...', type: 'info' }, function () {
                     $.ajax({
                         url: apiRoot + 'plate',
                         dataType: 'json',
                         type: 'POST',
                         beforeSend: function (xhr) {
-                            token = $('meta[name="csrf_token"]').attr('content');
+                            var token = $('meta[name="csrf_token"]').attr('content');
 
                             if (token) {
                                 return xhr.setRequestHeader('X-XSRF-TOKEN', token);
@@ -39,18 +80,16 @@ require(['react', 'jquery'], function (React) {
             render: function () {
                 return (
                     <div>
-                        <header id="header">
-                            <h1>Rego Search</h1>
+                        <h1>Rego Search</h1>
 
-                            <PlateForm onPlateSubmit={this.handlePlateSearch} />
-                            <PlateResponse response={this.state.response} type={this.state.type} />
-                        </header>
+                        <PlateSearchForm onPlateSubmit={this.handlePlateSearch} />
+                        <PlateSearchResponse response={this.state.response} type={this.state.type} />
                     </div>
                 );
             }
         });
 
-        var PlateResponse = React.createClass({
+        var PlateSearchResponse = React.createClass({
             processResponseType: function(type, message) {
                 switch (type) {
                     case 'success' :
@@ -79,17 +118,18 @@ require(['react', 'jquery'], function (React) {
             }
         });
 
-        var PlateForm = React.createClass({
+        var PlateSearchForm = React.createClass({
             handleSubmit: function (e) {
                 e.preventDefault();
 
                 var plateNumber = this.refs.plate.getDOMNode().value.trim();
 
-                if (!plateNumber) {
+                if (!plateNumber || (app.previousPlate == plateNumber)) {
                     return;
                 }
 
                 this.props.onPlateSubmit({ plate: plateNumber });
+                app.previousPlate = plateNumber;
             },
             render: function () {
                 return (
@@ -101,13 +141,16 @@ require(['react', 'jquery'], function (React) {
             }
         });
 
-        function render () {
-            React.render(
-                <Plates />,
-                document.getElementById('view')
-            );
-        }
+        var routes = (
+            <Route name="home" path="/" handler={PlatesApp}>
+                <Route name="search" handler={PlateSearch} />
+                <Route name="notify" handler={PlateNotify} />
+                <DefaultRoute handler={PlateHome} />
+            </Route>
+        );
 
-        render();
+        Router.run(routes, Router.HistoryLocation, function (Handler) {
+            React.render(<Handler />, document.getElementById('view'));
+        });
     })();
 });
