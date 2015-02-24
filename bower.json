@@ -8,5 +8,8 @@
     "text": "^2.0.14",
     "susy": "~2.2.2"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "breakpoint-sass": "~2.5.0"
+  }
 }

@@ -4,3 +4,41 @@
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
 
 @import "compass/reset";
+@import "susy";
+@import "sassy-maps/sass/sassy-maps";
+@import "breakpoint-sass/stylesheets/breakpoint";
+
+$tablet: 768px;
+$desktop: 992px;
+$fullsize: 1190px;
+
+$susy: (
+  columns: 12,
+  container: 600px,
+  global-box-sizing: border-box
+);
+
+@include border-box-sizing;
+
+body {
+  background-color: #f6f6f6;
+}
+
+.wrap {
+  @include container;
+}
+
+#view {
+  @include span(12);
+  background-color: #cccccc;
+}
+
+#nav {
+  @include span(full);
+
+  li {
+    display: inline-block;
+    text-align: center;
+    width: 33.33333%;
+  }
+}
