@@ -13,3 +13,4 @@ npm-debug.log
 public/dist
 .idea
 .idea/workspace.xml
+bower_components/text
