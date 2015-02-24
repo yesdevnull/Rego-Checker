@@ -5,6 +5,7 @@
     "backbone": "^1.1",
     "director": "^1.2.0",
     "grunt": "^0.4.5",
+    "grunt-contrib-compass": "^1.0.1",
     "grunt-contrib-requirejs": "^0.4.4",
     "grunt-contrib-uglify": "^0.7.0",
     "grunt-contrib-watch": "^0.6.1",

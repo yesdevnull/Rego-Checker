@@ -3,6 +3,8 @@
         <head>
             <meta charset="utf-8" />
             <meta name="csrf_token" content="{{ $encrypted_csrf_token }}" />
+
+            <link href="{{ asset('dist/css/screen.css') }}" media="screen, projection" rel="stylesheet" type="text/css" />
         </head>
 
         <body>

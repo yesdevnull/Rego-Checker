@@ -62,6 +62,13 @@ module.exports = function(grunt) {
                 }
             }
         },
+        compass: {
+            options: {
+                sassDir: 'resources/assets/css/',
+                cssDir: 'public/dist/css/',
+                require: 'susy'
+            }
+        },
         watch: {
             js_app: {
                 files: ['resources/assets/js/app.jsx'],
@@ -77,6 +84,7 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-compass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-watch');
