@@ -5,6 +5,9 @@ require(['react', 'router', 'jquery'], function (React, Router, $) {
     (function () {
         'use strict';
 
+        // var PureRenderMixin = React.addons.PureRenderMixin;
+        // mixins: [PureRenderMixin]
+
         var DefaultRoute = Router.DefaultRoute;
         var Link = Router.Link;
         var Route = Router.Route;
@@ -15,7 +18,7 @@ require(['react', 'router', 'jquery'], function (React, Router, $) {
                 return (
                     <div>
                         <header>
-                            <ul>
+                            <ul id="nav">
                                 <li><Link to="home">Home</Link></li>
                                 <li><Link to="search">Search</Link></li>
                                 <li><Link to="notify">Notify</Link></li>
