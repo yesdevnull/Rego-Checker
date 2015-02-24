@@ -15,3 +15,4 @@ public/dist
 .idea/workspace.xml
 bower_components
 resources/assets/js/lib
+*.map
