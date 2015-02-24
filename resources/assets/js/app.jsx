@@ -3,6 +3,53 @@ require(['react', 'router', 'jquery'], function (React, Router, $) {
         apiRoot = '/api/v1/';
 
     (function () {
+        'use strict';
+
+        // var PureRenderMixin = React.addons.PureRenderMixin;
+        // mixins: [PureRenderMixin]
+
+        var DefaultRoute = Router.DefaultRoute;
+        var Link = Router.Link;
+        var Route = Router.Route;
+        var RouteHandler = Router.RouteHandler;
+
+        var PlatesApp = React.createClass({
+            render: function () {
+                return (
+                    <div>
+                        <header>
+                            <ul id="nav">
+                                <li><Link to="home">Home</Link></li>
+                                <li><Link to="search">Search</Link></li>
+                                <li><Link to="notify">Notify</Link></li>
+                            </ul>
+                        </header>
+
+                        <section className="content">
+                            <RouteHandler />
+                        </section>
+
+                        <FooterContainer />
+                    </div>
+                );
+            }
+        });
+
+        var PlateHomeContainer = React.createClass({
+            shouldComponentUpdate: function () {
+                return false;
+            },
+            render: function () {
+                var pageTitle = 'Home';
+
+                document.title = pageTitle;
+
+                return (
+                    <PlateHome />
+                );
+            }
+        });
+
         var PlateHome = React.createClass({
             render: function () {
                 return (
@@ -53,6 +100,10 @@ require(['react', 'router', 'jquery'], function (React, Router, $) {
                 return { response: '', type: '' };
             },
             render: function () {
+                var pageTitle = 'Search';
+
+                document.title = pageTitle;
+
                 return (
                     <div>
                         <PlateSearchForm onPlateSubmit={this.handlePlateSearch} />
@@ -136,6 +187,18 @@ require(['react', 'router', 'jquery'], function (React, Router, $) {
                     </p>
                 );
             }
+        });
+
+        var routes = (
+            <Route name="home" path="/" handler={PlatesApp}>
+                <Route name="search" handler={PlateSearch} />
+                <Route name="notify" handler={PlateNotify} />
+                <DefaultRoute handler={PlateHomeContainer} />
+            </Route>
+        );
+
+        Router.run(routes, Router.HistoryLocation, function (Handler) {
+            React.render(<Handler />, document.getElementById('view'));
         });
     })();
 });
