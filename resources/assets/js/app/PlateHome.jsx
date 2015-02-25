@@ -1,7 +1,7 @@
-define(['react', 'jquery'], function(React, $) {
+define(['react'], function (React) {
     'use strict';
 
-    return React.createClass({
+    var PlateHome = React.createClass({
         render: function () {
             return (
                 <p>Plate Home</p>
@@ -9,13 +9,16 @@ define(['react', 'jquery'], function(React, $) {
         }
     });
 
-    //var PlateHome = React.createClass({
-    //    render: function () {
-    //        return (
-    //            <p>Plate Home</p>
-    //        );
-    //    }
-    //});
-    //
-    //return PlateHome;
+    var PlateHomeContainer = React.createClass({
+        shouldComponentUpdate: function () {
+            return false;
+        },
+        render: function () {
+            return (
+                <PlateHome />
+            );
+        }
+    });
+
+    return PlateHomeContainer;
 });

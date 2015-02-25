@@ -3,26 +3,6 @@ require(['react', 'router', 'jquery'], function (React, Router, $) {
         apiRoot = '/api/v1/';
 
     (function () {
-        var PlateHome = React.createClass({
-            render: function () {
-                return (
-                    <div>
-                        <h1>Home!</h1>
-                    </div>
-                );
-            }
-        });
-
-        var PlateNotify = React.createClass({
-            render: function () {
-                return (
-                    <div>
-                        <h1>Notify</h1>
-                    </div>
-                )
-            }
-        });
-
         var PlateSearch = React.createClass({
             handlePlateSearch: function (plate) {
                 this.setState({ response: 'Fetching...', type: 'info' }, function () {
