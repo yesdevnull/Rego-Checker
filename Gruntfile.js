@@ -110,6 +110,13 @@ module.exports = function(grunt) {
             js_app: {
                 files: ['resources/assets/js/app.jsx'],
                 tasks: 'requirejs:dev'
+            },
+            jsx: {
+                files: ['resources/assets/js/**/*.jsx'],
+                tasks: ['requirejs:dev', 'copy:requirejs'],
+                options: {
+                    livereload: true
+                }
             }
         },
         concurrent: {
