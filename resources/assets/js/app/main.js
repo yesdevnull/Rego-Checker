@@ -5,7 +5,8 @@ require.config({
         'react': '../lib/react',
         'text': '../lib/text',
         'router': '../lib/router',
-        'jquery': '../lib/jquery'
+        'jquery': '../lib/jquery',
+        'object_assign': '../lib/object_assign'
     },
     jsx: {
         fileExtension: ".jsx"
