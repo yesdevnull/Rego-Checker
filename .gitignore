@@ -16,3 +16,5 @@ public/dist
 bower_components
 resources/assets/js/lib
 *.map
+.sass-cache
+build/**/
