@@ -19,6 +19,7 @@
   },
   "private": true,
   "dependencies": {
+    "object-assign": "^2.0.0",
     "react-tools": "^0.12.2"
   }
 }
