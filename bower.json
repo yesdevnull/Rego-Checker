@@ -6,7 +6,8 @@
     "react-router": "^0.12.2",
     "requirejs-react-jsx": "^0.12.0",
     "text": "^2.0.14",
-    "susy": "~2.2.2"
+    "susy": "~2.2.2",
+    "requirejs-bower": "~2.1.16"
   },
   "private": true,
   "devDependencies": {
