@@ -4,6 +4,8 @@ define(['react', 'router', 'jsx!PlateHome', 'jsx!PlateSearch', 'jsx!PlateNotify'
     // var PureRenderMixin = React.addons.PureRenderMixin;
     // mixins: [PureRenderMixin]
 
+    var app = app || {};
+
     var DefaultRoute = Router.DefaultRoute;
     var Link = Router.Link;
     var Route = Router.Route;

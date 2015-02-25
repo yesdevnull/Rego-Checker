@@ -1,4 +1,4 @@
-define(['react', 'jquery'], function (React, $) {
+define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
     'use strict';
 
     var app = app || {};
@@ -82,7 +82,7 @@ define(['react', 'jquery'], function (React, $) {
                     break;
 
                 case 'info' :
-                    return 'Info: ' + message;
+                    return message;
                     break;
             }
         },
@@ -90,7 +90,7 @@ define(['react', 'jquery'], function (React, $) {
             var niceResponse = this.processResponseType(this.props.type, this.props.response);
 
             return (
-                <p>{niceResponse}</p>
+                <Alert inputClasses={this.props.type}>{niceResponse}</Alert>
             );
         }
     });
