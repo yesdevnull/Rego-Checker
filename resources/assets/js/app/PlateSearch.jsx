@@ -42,17 +42,25 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
     });
 
     var PlateSearchForm = React.createClass({
+        getInitialState: function () {
+            return {
+                currentPlate: '',
+                previousPlate: ''
+            };
+        },
         handleSubmit: function (e) {
             e.preventDefault();
 
             var plateNumber = this.refs.plate.getDOMNode().value.trim();
 
-            if (!plateNumber || (app.previousPlate == plateNumber)) {
+            if (!plateNumber || (this.props.previousPlate == plateNumber)) {
                 return;
             }
 
             this.props.onPlateSubmit({ plate: plateNumber });
-            app.previousPlate = plateNumber;
+            this.setState({
+                previousPlate: plateNumber
+            });
         },
         render: function () {
             return (
