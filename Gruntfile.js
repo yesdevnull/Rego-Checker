@@ -31,6 +31,10 @@ module.exports = function(grunt) {
                 src: 'bower_components/requirejs-text/text.js',
                 dest: 'resources/assets/js/lib/text.js'
             },
+            object_assign: {
+                src: 'node_modules/object-assign/index.js',
+                dest: 'resources/assets/js/lib/object_assign.js'
+            },
             requirejs: {
                 src: 'bower_components/requirejs-bower/require.js',
                 dest: 'public/dist/js/require.min.js'
@@ -61,7 +65,6 @@ module.exports = function(grunt) {
         requirejs: {
             options: {
                 mainConfigFile: 'resources/assets/js/app/main.js',
-                //out: 'public/dist/js/main.min.js',
                 baseUrl: 'resources/assets/js/app',
                 stubModules: ['jsx'],
                 modules: [{
@@ -69,11 +72,7 @@ module.exports = function(grunt) {
                     exclude: ['JSXTransformer', 'text']
                 }],
                 dir: 'build/js',
-                //removeCombined: true,
-                //findNestedDependencies: true,
-                //include: ['jsx!../app/Core'],
                 preserveLicenseComments: false
-                //wrap: true
             },
             dev: {
                 options: {
@@ -121,7 +120,7 @@ module.exports = function(grunt) {
         },
         concurrent: {
             dev: {
-                tasks: ['watch', 'compass:dev'],
+                tasks: ['watch:jsx', 'compass:dev'],
                 options: {
                     logConcurrentOutput: true
                 }
