@@ -15,7 +15,7 @@ define(['react', 'router', 'jsx!PlateHome', 'jsx!PlateSearch', 'jsx!PlateNotify'
                 <div>
                     <header>
                         <ul id="nav">
-                            <li><Link to="home">Home</Link></li>
+                            <li><Link to="/">Home</Link></li>
                             <li><Link to="search">Search</Link></li>
                             <li><Link to="notify">Notify</Link></li>
                         </ul>
@@ -32,7 +32,7 @@ define(['react', 'router', 'jsx!PlateHome', 'jsx!PlateSearch', 'jsx!PlateNotify'
     });
 
     var routes = (
-        <Route name="home" path="/" handler={PlateApp}>
+        <Route handler={PlateApp}>
             <Route name="search" handler={PlateSearch} />
             <Route name="notify" handler={PlateNotify} />
             <DefaultRoute handler={PlateHome} />
