@@ -6,7 +6,7 @@ require.config({
         'text': '../lib/text',
         'router': '../lib/router',
         'jquery': '../lib/jquery',
-        'object_assign': '../lib/object_assign'
+        'classnames': '../lib/classnames'
     },
     jsx: {
         fileExtension: ".jsx"

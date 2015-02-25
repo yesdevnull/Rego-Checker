@@ -31,9 +31,9 @@ module.exports = function(grunt) {
                 src: 'bower_components/requirejs-text/text.js',
                 dest: 'resources/assets/js/lib/text.js'
             },
-            object_assign: {
-                src: 'node_modules/object-assign/index.js',
-                dest: 'resources/assets/js/lib/object_assign.js'
+            classnames: {
+                src: 'node_modules/classnames/index.js',
+                dest: 'resources/assets/js/lib/classnames.js'
             },
             requirejs: {
                 src: 'bower_components/requirejs-bower/require.js',
