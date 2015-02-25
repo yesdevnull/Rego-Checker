@@ -34,7 +34,7 @@ define(['react', 'router', 'jsx!PlateHome', 'jsx!PlateSearch', 'jsx!PlateNotify'
     var routes = (
         <Route handler={PlateApp}>
             <Route name="search" handler={PlateSearch} />
-            <Route name="notify" handler={PlateNotify} />
+            <Route name="notify" path="/notify/:plate?" handler={PlateNotify} />
             <DefaultRoute handler={PlateHome} />
         </Route>
     );

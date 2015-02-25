@@ -1,8 +1,10 @@
-define(['react'], function (React) {
+define(['react', 'router'], function (React, Router) {
     'use strict';
 
     var PlateNotify = React.createClass({
         render: function () {
+            // var plate = this.props.plate;
+
             return (
                 <p>
                     Notify!
@@ -12,9 +14,10 @@ define(['react'], function (React) {
     });
 
     return React.createClass({
+        mixins: [Router.State],
         render: function () {
             return (
-                <PlateNotify />
+                <PlateNotify plate={this.getParams().plate} />
             );
         }
     });

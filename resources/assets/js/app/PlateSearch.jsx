@@ -43,7 +43,7 @@ define(['react', 'router', 'jquery', 'jsx!Alert'], function (React, Router, $, A
         },
         render: function () {
             if (this.state.previousPlate) {
-                var notifyLink = <Link to="notify" params={{ plateNumber: this.state.previousPlate }}>Notify</Link>;
+                var notifyLink = <Link to="notify" params={{ plate: this.state.previousPlate }}>Notify</Link>;
             }
 
             return (
