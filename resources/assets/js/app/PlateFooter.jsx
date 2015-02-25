@@ -13,7 +13,7 @@ define(['react'], function (React) {
         }
     });
 
-    var PlateFooterContainer = React.createClass({
+    return React.createClass({
         shouldComponentUpdate: function () {
             return false;
         },
@@ -23,6 +23,4 @@ define(['react'], function (React) {
             )
         }
     });
-
-    return PlateFooterContainer;
 });

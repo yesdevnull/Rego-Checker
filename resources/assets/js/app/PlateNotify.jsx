@@ -11,13 +11,11 @@ define(['react'], function (React) {
         }
     });
 
-    var PlateNotifyContainer = React.createClass({
+    return React.createClass({
         render: function () {
             return (
                 <PlateNotify />
             );
         }
     });
-
-    return PlateNotifyContainer;
 });

@@ -9,13 +9,11 @@ define(['react'], function (React) {
         }
     });
 
-    var PlateHomeContainer = React.createClass({
+    return React.createClass({
         render: function () {
             return (
                 <PlateHome />
             );
         }
     });
-
-    return PlateHomeContainer;
 });
