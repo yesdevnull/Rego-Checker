@@ -114,28 +114,5 @@ require(['react', 'router', 'jquery'], function (React, Router, $) {
                 );
             }
         });
-
-        var FooterContainer = React.createClass({
-            shouldComponentUpdate: function () {
-                return false;
-            },
-            render: function () {
-                return (
-                    <footer>
-                        <FooterBox />
-                    </footer>
-                );
-            }
-        });
-
-        var FooterBox = React.createClass({
-            render: function () {
-                return (
-                    <p>
-                        Brought to you by <a href="https://www.yesdevnull.net">Dan Barrett</a> &middot; <a href="https://github.com/yesdevnull/Rego-Checker">View on GitHub</a>
-                    </p>
-                );
-            }
-        });
     })();
 });

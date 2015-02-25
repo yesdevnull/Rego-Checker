@@ -5,11 +5,24 @@ define(['react'], function (React) {
         render: function () {
             return (
                 <footer>
-                    Footer!
+                    <p>
+                        Brought to you by <a href="https://www.yesdevnull.net">Dan Barrett</a> &middot; <a href="https://github.com/yesdevnull/Rego-Checker">View on GitHub</a>
+                    </p>
                 </footer>
             );
         }
     });
 
-    return PlateFooter;
+    var PlateFooterContainer = React.createClass({
+        shouldComponentUpdate: function () {
+            return false;
+        },
+        render: function () {
+            return (
+                <PlateFooter />
+            )
+        }
+    });
+
+    return PlateFooterContainer;
 });
