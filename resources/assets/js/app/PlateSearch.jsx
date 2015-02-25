@@ -1,5 +1,7 @@
-define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
+define(['react', 'router', 'jquery', 'jsx!Alert'], function (React, Router, $, Alert) {
     'use strict';
+
+    var Link = Router.Link;
 
     var PlateSearch = React.createClass({
         handlePlateSearch: function (plate) {
@@ -17,7 +19,11 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
                     },
                     data: plate,
                     success: function (data) {
-                        this.setState({ response: data.response.message, type: data.response.status });
+                        this.setState({
+                            response: data.response.message,
+                            type: data.response.status,
+                            previousPlate: plate.plate
+                        });
                     }.bind(this),
                     error: function (xhr, status, err) {
                         console.error('Error!');
@@ -29,25 +35,28 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
             });
         },
         getInitialState: function () {
-            return { response: '', type: '' };
+            return {
+                response: '',
+                type: '',
+                previousPlate: ''
+            };
         },
         render: function () {
+            if (this.state.previousPlate) {
+                var notifyLink = <Link to="notify" params={{ plateNumber: this.state.previousPlate }}>Notify</Link>;
+            }
+
             return (
                 <div>
-                    <PlateSearchForm onPlateSubmit={this.handlePlateSearch} />
+                    <PlateSearchForm previousPlate={this.state.previousPlate} onPlateSubmit={this.handlePlateSearch} />
                     <PlateSearchResponse response={this.state.response} type={this.state.type} />
+                    {notifyLink}
                 </div>
             );
         }
     });
 
     var PlateSearchForm = React.createClass({
-        getInitialState: function () {
-            return {
-                currentPlate: '',
-                previousPlate: ''
-            };
-        },
         handleSubmit: function (e) {
             e.preventDefault();
 
@@ -58,9 +67,7 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
             }
 
             this.props.onPlateSubmit({ plate: plateNumber });
-            this.setState({
-                previousPlate: plateNumber
-            });
+            this.props.previousPlate = plateNumber
         },
         render: function () {
             return (
