@@ -31,6 +31,19 @@ module.exports = function(grunt) {
                 src: 'bower_components/requirejs-text/text.js',
                 dest: 'resources/assets/js/lib/text.js'
             },
+            requirejs: {
+                src: 'bower_components/requirejs-bower/require.js',
+                dest: 'public/dist/js/require.min.js'
+            },
+            main_app: {
+                src: 'build/js/main.js',
+                dest: 'public/dist/js/main.min.js',
+                options: {
+                    compress: false,
+                    mangle: false,
+                    sourceMap: true
+                }
+            },
             extras: {
                 options: {
                     sourceMap: false
@@ -47,15 +60,20 @@ module.exports = function(grunt) {
         },
         requirejs: {
             options: {
-                mainConfigFile: 'resources/assets/js/main.js',
-                include: ['main'],
-                out: 'public/dist/js/main.min.js',
-                baseUrl: 'resources/assets/js',
-                removeCombined: true,
-                findNestedDependencies: true,
-                preserveLicenseComments: false,
-                wrap: true,
-                insertRequire: ['main']
+                mainConfigFile: 'resources/assets/js/app/main.js',
+                //out: 'public/dist/js/main.min.js',
+                baseUrl: 'resources/assets/js/app',
+                stubModules: ['jsx'],
+                modules: [{
+                    name: 'main',
+                    exclude: ['JSXTransformer', 'text']
+                }],
+                dir: 'build/js',
+                //removeCombined: true,
+                //findNestedDependencies: true,
+                //include: ['jsx!../app/Core'],
+                preserveLicenseComments: false
+                //wrap: true
             },
             dev: {
                 options: {
@@ -75,6 +93,17 @@ module.exports = function(grunt) {
                     outputStyle: 'nested',
                     watch: true
                 }
+            }
+        },
+        copy: {
+            requirejs: {
+                files: [{
+                    expand: true,
+                    src: ['build/js/main.*'],
+                    dest: 'public/dist/js',
+                    filter: 'isFile',
+                    flatten: true
+                }]
             }
         },
         watch: {
@@ -101,12 +130,13 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-compass');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-notify');
 
-    grunt.registerTask('build', ['uglify', 'requirejs:dev']);
+    grunt.registerTask('build', ['requirejs:dev', 'copy:requirejs']);
     grunt.registerTask('app', ['requirejs:dev']);
     grunt.registerTask('focus', ['concurrent:dev']);
 

@@ -13,6 +13,6 @@
                 <section id="view"></section>
             </div>
 
-            <script data-main="{{ asset('dist/js/main.min.js') }}" src="{{ asset('dist/js/_require.min.js') }}"></script>
+            <script data-main="{{ asset('dist/js/main.js') }}" src="{{ asset('dist/js/require.min.js') }}"></script>
         </body>
     </html>
