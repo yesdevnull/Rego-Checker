@@ -25,6 +25,7 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
                         console.error('Error!');
                         console.error(xhr);
                         console.error(this.props.url, status, err.toString());
+                        this.setState({ response: err.toString(), type: status });
                     }.bind(this)
                 });
             });
@@ -67,30 +68,9 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
     });
 
     var PlateSearchResponse = React.createClass({
-        processResponseType: function(type, message) {
-            switch (type) {
-                case 'success' :
-                    return message;
-                    break;
-
-                case 'warning' :
-                    return 'Warning!  ' + message;
-                    break;
-
-                case 'error' :
-                    return 'Error: ' + message;
-                    break;
-
-                case 'info' :
-                    return message;
-                    break;
-            }
-        },
         render: function () {
-            var niceResponse = this.processResponseType(this.props.type, this.props.response);
-
             return (
-                <Alert inputClasses={this.props.type}>{niceResponse}</Alert>
+                <Alert type={this.props.type} inputClasses={this.props.type}>{this.props.response}</Alert>
             );
         }
     });
