@@ -10,9 +10,6 @@ define(['react'], function (React) {
     });
 
     var PlateHomeContainer = React.createClass({
-        shouldComponentUpdate: function () {
-            return false;
-        },
         render: function () {
             return (
                 <PlateHome />

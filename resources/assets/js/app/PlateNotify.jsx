@@ -12,9 +12,6 @@ define(['react'], function (React) {
     });
 
     var PlateNotifyContainer = React.createClass({
-        shouldComponentUpdate: function () {
-            return false;
-        },
         render: function () {
             return (
                 <PlateNotify />

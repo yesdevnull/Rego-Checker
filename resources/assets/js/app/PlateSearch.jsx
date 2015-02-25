@@ -1,8 +1,6 @@
 define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
     'use strict';
 
-    var app = app || {};
-
     var PlateSearch = React.createClass({
         handlePlateSearch: function (plate) {
             this.setState({ response: 'Fetching...', type: 'info' }, function () {
@@ -75,16 +73,11 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
         }
     });
 
-    var PlateSearchContainer = React.createClass({
-        shouldComponentUpdate: function () {
-            return false;
-        },
+    return React.createClass({
         render: function () {
             return (
                 <PlateSearch />
             );
         }
     });
-
-    return PlateSearchContainer;
 });
