@@ -14,9 +14,6 @@ define(['react'], function (React) {
     });
 
     return React.createClass({
-        shouldComponentUpdate: function () {
-            return false;
-        },
         render: function () {
             return (
                 <PlateFooter />
