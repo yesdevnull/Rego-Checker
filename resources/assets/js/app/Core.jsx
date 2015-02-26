@@ -1,4 +1,4 @@
-define(['react', 'router', 'jsx!PlateHome', 'jsx!PlateSearch', 'jsx!PlateNotify', 'jsx!PlateFooter'], function(React, Router, PlateHome, PlateSearch, PlateNotify, PlateFooter) {
+define(['react', 'router', 'jsx!PlateSearch', 'jsx!PlateFooter'], function(React, Router, PlateSearch, PlateFooter) {
     'use strict';
 
     // var PureRenderMixin = React.addons.PureRenderMixin;
@@ -14,11 +14,7 @@ define(['react', 'router', 'jsx!PlateHome', 'jsx!PlateSearch', 'jsx!PlateNotify'
             return (
                 <div>
                     <header>
-                        <ul id="nav">
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="search">Search</Link></li>
-                            <li><Link to="notify">Notify</Link></li>
-                        </ul>
+                        <h1>Rego Checker</h1>
                     </header>
 
                     <section className="content">
@@ -34,8 +30,7 @@ define(['react', 'router', 'jsx!PlateHome', 'jsx!PlateSearch', 'jsx!PlateNotify'
     var routes = (
         <Route handler={PlateApp}>
             <Route name="search" handler={PlateSearch} />
-            <Route name="notify" path="/notify/:plate?" handler={PlateNotify} />
-            <DefaultRoute handler={PlateHome} />
+            <DefaultRoute handler={PlateSearch} />
         </Route>
     );
 

@@ -1,4 +1,4 @@
-define(['react', 'router', 'jquery', 'jsx!Alert'], function (React, Router, $, Alert) {
+define(['react', 'router', 'jquery', 'jsx!Alert', 'jsx!PlateNotify'], function (React, Router, $, Alert, PlateNotify) {
     'use strict';
 
     var Link = Router.Link;
@@ -46,14 +46,14 @@ define(['react', 'router', 'jquery', 'jsx!Alert'], function (React, Router, $, A
         },
         render: function () {
             if (currentPlate && (this.state.type == 'success')) {
-                var notifyLink = <Link to="notify" params={{ plate: previousPlate }}>Notify</Link>;
+                var notify = <PlateNotify plate={currentPlate} />
             }
 
             return (
                 <div className="box">
                     <PlateSearchForm onPlateSubmit={this.handlePlateSearch} />
                     <PlateSearchResponse response={this.state.response} type={this.state.type} />
-                    {notifyLink}
+                    {notify}
                 </div>
             );
         }
