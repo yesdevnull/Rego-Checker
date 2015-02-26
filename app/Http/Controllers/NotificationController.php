@@ -3,7 +3,7 @@
 use Controller;
 use Validator;
 use Crypt;
-use Request;
+use Illuminate\Http\Request;
 use App\Email;
 use App\Plate;
 use App\Exceptions\ApiErrorException;
@@ -11,18 +11,14 @@ use App\Exceptions\ApiErrorException;
 class Notification extends Controller {
     public function subscribe(Request $request) {
         $validator = Validator::make($request->all(), [
-            [
-                'email' => [
-                    'required',
-                    'email',
-                    'unique:email'
-                ]
+            'email' => [
+                'required',
+                'email',
+                'unique:emails'
             ],
-            [
-                'plate' => [
-                    'required',
-                    'max:20'
-                ]
+            'plate' => [
+                'required',
+                'max:20'
             ]
         ]);
 
@@ -46,6 +42,11 @@ class Notification extends Controller {
             $plate->save();
 
             $email->plates()->save($plate);
+
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Successfully subscribed to notifications.  Please check your inbox to confirm your email address'
+            ]);
         }
     }
 
