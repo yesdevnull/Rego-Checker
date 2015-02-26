@@ -18,3 +18,4 @@ resources/assets/js/lib
 *.map
 .sass-cache
 build/**/
+.env
