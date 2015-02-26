@@ -3,6 +3,7 @@
 use Symfony\Component\DomCrawler\Crawler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use App\Exceptions\ApiException;
 
 /**
  * Class RegoCheck
@@ -86,7 +87,7 @@ class RegoCheck extends Controller {
 
 			if (count($expiryResults) == 0) {
 				if ($apiExpiryBody->filter('.section-body p strong span')->first()->text()) {
-                    return ['status' => 'error', 'message' => sprintf('Unable to locate plate %s', $plate)];
+                    throw new ApiException(sprintf('Unable to locate plate "%s"', $plate), 500);
 				} else {
                     return ['status' => 'error', 'message' => 'Unable to scrape registration details from DoT'];
 				}
