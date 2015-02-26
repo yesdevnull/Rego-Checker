@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 Route::get('/', function()
 {
     $encrypted_csrf_token = Crypt::encrypt(csrf_token());
@@ -21,10 +23,10 @@ Route::group(['prefix' => 'api'], function() {
             return response()->json(['response' => $plateCheck]);
         });
 
-        Route::post('/subscribe', function() {
+        Route::post('/subscribe', function(Request $request) {
             $notification = new App\Http\Controllers\Notification;
 
-            $result = $notification->subscribe(Input::get('email'), Input::get('plate'));
+            $result = $notification->subscribe($request);
 
             return response()->json(['response' => $result]);
         });
