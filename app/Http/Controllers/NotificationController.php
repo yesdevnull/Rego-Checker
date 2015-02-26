@@ -2,6 +2,7 @@
 
 use Controller;
 use Validator;
+use Crypt;
 use Request;
 use App\Email;
 use App\Plate;
@@ -31,6 +32,20 @@ class Notification extends Controller {
             $email = new Email;
 
             $email->email = $request->input('email');
+            $email->enabled = true;
+            // Just need a random string for the email confirmation token
+            $email->token = Crypt::encrypt($request->input('email'));
+
+            $email->save();
+
+            $plate = new Plate;
+
+            $plate->state = 'WA';
+            $plate->plate = $request->input('plate');
+
+            $plate->save();
+
+            $email->plates()->save($plate);
         }
     }
 
