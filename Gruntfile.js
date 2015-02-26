@@ -15,19 +15,15 @@ module.exports = function(grunt) {
                 src: 'bower_components/react/JSXTransformer.js',
                 dest: 'resources/assets/js/lib/JSXTransformer.js'
             },
-            backbone: {
-                src: 'node_modules/backbone/backbone.js',
-                dest: 'resources/assets/js/lib/backbone.js'
-            },
-            underscore: {
-                src: 'node_modules/underscore/underscore.js',
-                dest: 'resources/assets/js/lib/underscore.js'
-            },
             jsx: {
                 src: 'bower_components/requirejs-react-jsx/jsx.js',
                 dest: 'resources/assets/js/lib/jsx.js'
             },
-            tools: {
+            jquery: {
+                src: 'bower_components/jquery/dist/jquery.min.js',
+                dest: 'resources/assets/js/lib/jquery.js'
+            },
+            text: {
                 src: 'bower_components/requirejs-text/text.js',
                 dest: 'resources/assets/js/lib/text.js'
             },
@@ -38,7 +34,7 @@ module.exports = function(grunt) {
             requirejs: {
                 src: 'bower_components/requirejs-bower/require.js',
                 dest: 'public/dist/js/require.min.js'
-            },
+            }/*,
             main_app: {
                 src: 'build/js/main.js',
                 dest: 'public/dist/js/main.min.js',
@@ -47,20 +43,7 @@ module.exports = function(grunt) {
                     mangle: false,
                     sourceMap: true
                 }
-            },
-            extras: {
-                options: {
-                    sourceMap: false
-                },
-                files: [{
-                    expand: true,
-                    cwd: 'resources/assets/js',
-                    src: '_*.js',
-                    dest: 'public/dist/js',
-                    ext: '.min.js',
-                    extDot: 'first'
-                }]
-            }
+            }*/
         },
         requirejs: {
             options: {
@@ -106,10 +89,6 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            js_app: {
-                files: ['resources/assets/js/app.jsx'],
-                tasks: 'requirejs:dev'
-            },
             jsx: {
                 files: ['resources/assets/js/**/*.jsx'],
                 tasks: ['requirejs:dev', 'copy:requirejs'],
@@ -142,8 +121,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-notify');
 
-    grunt.registerTask('build', ['requirejs:dev', 'copy:requirejs']);
-    grunt.registerTask('app', ['requirejs:dev']);
+    grunt.registerTask('build', ['uglify', 'requirejs:dev', 'copy:requirejs']);
+    grunt.registerTask('app', ['requirejs:dev', 'copy:requirejs']);
     grunt.registerTask('focus', ['concurrent:dev']);
 
     grunt.task.run('notify_hooks');
