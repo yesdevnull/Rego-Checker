@@ -3,7 +3,8 @@
 use Symfony\Component\DomCrawler\Crawler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use App\Exceptions\ApiException;
+use App\Exceptions\ApiErrorException;
+use App\Exceptions\ApiWarningException;
 
 /**
  * Class RegoCheck
@@ -63,7 +64,7 @@ class RegoCheck extends Controller {
 		$sessionId = substr($sessionSite->filter('div.licensing-big-form form')->attr('action'), 1);
 
 		if (!preg_match('#jsessionid#', $sessionId)) {
-			throw new Exception('Did not receive valid session');
+			throw new ApiErrorException('Did not receive valid session', 500);
 		}
 
 		$apiResponse = '';
@@ -87,23 +88,23 @@ class RegoCheck extends Controller {
 
 			if (count($expiryResults) == 0) {
 				if ($apiExpiryBody->filter('.section-body p strong span')->first()->text()) {
-                    throw new ApiException(sprintf('Unable to locate plate "%s"', $plate), 500);
+                    throw new ApiErrorException(sprintf('Unable to locate plate "%s"', $plate), 500);
 				} else {
-                    return ['status' => 'error', 'message' => 'Unable to scrape registration details from DoT'];
+                    throw new ApiErrorException('Unable to scrape registration details from DoT', 500);
 				}
 			} else {
 				$expiryResults = $expiryResults->text();
 			}
 
 			if (preg_match('#unregistered#', $expiryResults)) {
-                return ['status' => 'warning', 'message' => sprintf('Plate "%s" is unregistered, expired, suspended or cancelled', $plate)];
+                return new ApiWarningException(sprintf('Plate "%s" is unregistered, expired, suspended or cancelled', $plate), 500);
             } elseif (!preg_match('/[0-3][0-9]\/[0-1][0-9]\/[1-2][0-9]{3}/i', $expiryResults)) {
-                return ['status' => 'warning', 'message' => 'Invalid data scraped from DoT'];
+                return new ApiWarningException('Invalid data scraped from DoT', 500);
             }
 
 			return ['status' => 'success', 'message' => sprintf('Plate expires on %s', $expiryResults)];
 		} else {
-			throw new Exception('An unknown error occurred');
+			throw new ApiErrorException('An unknown error occurred', 500);
 		}
 	}
 }
