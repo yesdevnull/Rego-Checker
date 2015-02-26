@@ -3,6 +3,9 @@ define(['react', 'router', 'jquery', 'jsx!Alert'], function (React, Router, $, A
 
     var Link = Router.Link;
 
+    var previousPlate = '';
+    var currentPlate = '';
+
     var PlateSearch = React.createClass({
         handlePlateSearch: function (plate) {
             this.setState({ response: 'Fetching...', type: 'info' }, function () {
@@ -21,16 +24,16 @@ define(['react', 'router', 'jquery', 'jsx!Alert'], function (React, Router, $, A
                     },
                     data: plate
                 }).done(function (data) {
+                    currentPlate = plate.plate;
+
                     that.setState({
                         response: data.response.message,
-                        type: data.response.status,
-                        previousPlate: plate.plate
+                        type: data.response.status
                     });
                 }).fail(function (xhr, status, err) {
                     that.setState({
                         response: xhr.responseJSON.message,
-                        type: xhr.responseJSON.type,
-                        previousPlate: plate.plate
+                        type: xhr.responseJSON.type
                     });
                 });
             });
@@ -38,18 +41,17 @@ define(['react', 'router', 'jquery', 'jsx!Alert'], function (React, Router, $, A
         getInitialState: function () {
             return {
                 response: '',
-                type: '',
-                previousPlate: ''
+                type: ''
             };
         },
         render: function () {
-            if (this.state.previousPlate && (this.state.type == 'success')) {
-                var notifyLink = <Link to="notify" params={{ plate: this.state.previousPlate }}>Notify</Link>;
+            if (currentPlate && (this.state.type == 'success')) {
+                var notifyLink = <Link to="notify" params={{ plate: previousPlate }}>Notify</Link>;
             }
 
             return (
                 <div className="box">
-                    <PlateSearchForm previousPlate={this.state.previousPlate} onPlateSubmit={this.handlePlateSearch} />
+                    <PlateSearchForm onPlateSubmit={this.handlePlateSearch} />
                     <PlateSearchResponse response={this.state.response} type={this.state.type} />
                     {notifyLink}
                 </div>
@@ -61,19 +63,20 @@ define(['react', 'router', 'jquery', 'jsx!Alert'], function (React, Router, $, A
         handleSubmit: function (e) {
             e.preventDefault();
 
+            currentPlate = '';
             var plateNumber = this.refs.plate.getDOMNode().value.trim();
 
-            if (!plateNumber || (this.props.previousPlate == plateNumber)) {
+            if (!plateNumber || (previousPlate == plateNumber)) {
                 return;
             }
 
             this.props.onPlateSubmit({ plate: plateNumber });
-            this.props.previousPlate = plateNumber
+            previousPlate = plateNumber;
         },
         render: function () {
             return (
                 <form className="plateForm" onSubmit={this.handleSubmit}>
-                    <input type="text" placeholder="Plate #" ref="plate" />
+                    <input type="text" placeholder="Plate #" ref="plate" defaultValue={currentPlate} />
                     <input type="submit" value="Search" />
                     <p className="lawsuits"><strong>Note:</strong> I can't guarantee this data is correct.</p>
                 </form>
