@@ -1,7 +1,5 @@
-define(['react', 'router', 'jquery', 'jsx!Alert', 'jsx!PlateNotify'], function (React, Router, $, Alert, PlateNotify) {
+define(['react', 'jquery', 'jsx!Alert', 'jsx!PlateNotify'], function (React, $, Alert, PlateNotify) {
     'use strict';
-
-    var Link = Router.Link;
 
     var previousPlate = '';
     var currentPlate = '';

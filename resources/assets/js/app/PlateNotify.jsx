@@ -1,4 +1,4 @@
-define(['react', 'router', 'jquery'], function (React, Router, $) {
+define(['react', 'jquery'], function (React, $) {
     'use strict';
 
     var PlateNotify = React.createClass({
@@ -7,6 +7,7 @@ define(['react', 'router', 'jquery'], function (React, Router, $) {
 
             return (
                 <div>
+                    <p>You can optionally be notified when the plate {plate} has 30 left until it expires by entering your email address below.</p>
                     <PlateNotifyForm plate={plate} />
                 </div>
             );
@@ -32,7 +33,7 @@ define(['react', 'router', 'jquery'], function (React, Router, $) {
     return React.createClass({
         render: function () {
             return (
-                <PlateNotify {...this.props} />
+                <PlateNotify plate={this.props.plate} />
             );
         }
     });
