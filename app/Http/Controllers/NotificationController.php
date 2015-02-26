@@ -43,10 +43,10 @@ class Notification extends Controller {
 
             $email->plates()->save($plate);
 
-            return response()->json([
+            return [
                 'type' => 'success',
                 'message' => 'Successfully subscribed to notifications.  Please check your inbox to confirm your email address'
-            ]);
+            ];
         }
     }
 
