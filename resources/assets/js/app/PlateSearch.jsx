@@ -6,6 +6,8 @@ define(['react', 'router', 'jquery', 'jsx!Alert'], function (React, Router, $, A
     var PlateSearch = React.createClass({
         handlePlateSearch: function (plate) {
             this.setState({ response: 'Fetching...', type: 'info' }, function () {
+                var that = this;
+
                 $.ajax({
                     url: '/api/v1/plate',
                     dataType: 'json',
@@ -17,20 +19,19 @@ define(['react', 'router', 'jquery', 'jsx!Alert'], function (React, Router, $, A
                             return xhr.setRequestHeader('X-XSRF-TOKEN', token);
                         }
                     },
-                    data: plate,
-                    success: function (data) {
-                        this.setState({
-                            response: data.response.message,
-                            type: data.response.status,
-                            previousPlate: plate.plate
-                        });
-                    }.bind(this),
-                    error: function (xhr, status, err) {
-                        console.error('Error!');
-                        console.error(xhr);
-                        console.error(this.props.url, status, err.toString());
-                        this.setState({ response: err.toString(), type: status });
-                    }.bind(this)
+                    data: plate
+                }).done(function (data) {
+                    that.setState({
+                        response: data.response.message,
+                        type: data.response.status,
+                        previousPlate: plate.plate
+                    });
+                }).fail(function (xhr, status, err) {
+                    that.setState({
+                        response: xhr.responseJSON.message,
+                        type: xhr.responseJSON.type,
+                        previousPlate: plate.plate
+                    });
                 });
             });
         },
@@ -42,12 +43,12 @@ define(['react', 'router', 'jquery', 'jsx!Alert'], function (React, Router, $, A
             };
         },
         render: function () {
-            if (this.state.previousPlate) {
+            if (this.state.previousPlate && (this.state.type == 'success')) {
                 var notifyLink = <Link to="notify" params={{ plate: this.state.previousPlate }}>Notify</Link>;
             }
 
             return (
-                <div>
+                <div className="box">
                     <PlateSearchForm previousPlate={this.state.previousPlate} onPlateSubmit={this.handlePlateSearch} />
                     <PlateSearchResponse response={this.state.response} type={this.state.type} />
                     {notifyLink}
