@@ -21,8 +21,12 @@ Route::group(['prefix' => 'api'], function() {
             return response()->json(['response' => $plateCheck]);
         });
 
-        Route::post('/email', function() {
+        Route::post('/subscribe', function() {
+            $notification = new App\Http\Controllers\Notification;
 
+            $result = $notification->subscribe(Input::get('email'), Input::get('plate'));
+
+            return response()->json(['response' => $result]);
         });
     });
 });
