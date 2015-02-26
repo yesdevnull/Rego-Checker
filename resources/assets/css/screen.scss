@@ -71,6 +71,12 @@ strong {
   @include padding(30px null);
 }
 
+.box {
+  @include span(12);
+  @include prefix(10%);
+  @include suffix(10%);
+}
+
 form {
   text-align: center;
 
@@ -81,8 +87,6 @@ form {
 }
 
 .message {
-  width: 80%;
-  @include margin(15px auto);
   border-radius: 4px;
   padding: 15px;
   background-color: transparent;
