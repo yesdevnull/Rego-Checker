@@ -1,7 +1,9 @@
-<?php
+<?php namespace App\Http\Controllers;
 
 use Symfony\Component\DomCrawler\Crawler;
 use GuzzleHttp\Client;
+use Controller;
+use Log;
 use GuzzleHttp\Exception\RequestException;
 use App\Exceptions\ApiErrorException;
 use App\Exceptions\ApiWarningException;
@@ -9,7 +11,7 @@ use App\Exceptions\ApiWarningException;
 /**
  * Class RegoCheck
  */
-class RegoCheck extends Controller {
+class RegistrationChecker extends Controller {
 	/**
 	 * @var
 	 */
@@ -29,16 +31,21 @@ class RegoCheck extends Controller {
 		$this->apiClient = new Client();
 	}
 
+    /**
+     * @param $state
+     * @param $plate
+     * @return string|Crawler
+     */
     public function plateCheck($state, $plate) {
         return $this->stateSwitch($state, $plate);
     }
 
-	/**
-	 * @param string $state
-	 * @param string $plate
-	 * @return string|Crawler
-	 * @throws Exception
-	 */
+    /**
+     * @param $state
+     * @param $plate
+     * @return ApiWarningException|array
+     * @throws ApiErrorException
+     */
 	public function stateSwitch($state, $plate) {
 		switch ($state) {
 			case 'wa' :
@@ -47,11 +54,11 @@ class RegoCheck extends Controller {
 		}
 	}
 
-	/**
-	 * @param string $plate
-	 * @return string|Crawler
-	 * @throws Exception
-	 */
+    /**
+     * @param $plate
+     * @return ApiWarningException|array
+     * @throws ApiErrorException
+     */
 	public function _waRegoCheck($plate) {
 		$sessionRequest = $this->webClient->createRequest('GET', 'https://online.transport.wa.gov.au/webExternal/registration/?');
 
@@ -75,7 +82,8 @@ class RegoCheck extends Controller {
 			]);
 		} catch (RequestException $e) {
 			if ($e->hasResponse()) {
-				echo $e->getResponse() . "\n";
+				Log::error($e->getResponse());
+                throw new ApiErrorException('Unknown query error occurred', 500);
 			}
 		}
 
