@@ -14,7 +14,7 @@ public/dist
 .idea
 .idea/workspace.xml
 bower_components
-resources/assets/js/lib
+resources/assets/js/lib/*.js
 *.map
 .sass-cache
 build/**/
