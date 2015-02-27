@@ -1,17 +1,21 @@
 <?php namespace App\Http\Controllers;
 
-use Symfony\Component\DomCrawler\Crawler;
-use GuzzleHttp\Client;
-use Controller;
 use Log;
-use GuzzleHttp\Exception\RequestException;
+use Debugbar;
+use Controller;
+use GuzzleHttp\Client;
+use Illuminate\Http\Request;
 use App\Exceptions\ApiErrorException;
 use App\Exceptions\ApiWarningException;
+use Symfony\Component\DomCrawler\Crawler;
+use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\Security\Core\Exception\InvalidArgumentException;
 
 /**
- * Class RegoCheck
+ * Class RegistrationController
+ * @package App\Http\Controllers
  */
-class RegistrationChecker extends Controller {
+class RegistrationController extends Controller {
 	/**
 	 * @var
 	 */
@@ -32,12 +36,11 @@ class RegistrationChecker extends Controller {
 	}
 
     /**
-     * @param $state
-     * @param $plate
-     * @return string|Crawler
+     * @param Request $request
+     * @return ApiWarningException|array
      */
-    public function plateCheck($state, $plate) {
-        return $this->stateSwitch($state, $plate);
+    public function plateCheck(Request $request) {
+        return $this->stateSwitch($request->input('state'), $request->input('plate'));
     }
 
     /**
@@ -51,6 +54,10 @@ class RegistrationChecker extends Controller {
 			case 'wa' :
 				return $this->_waRegoCheck($plate);
 			break;
+
+            default:
+                throw new ApiErrorException('No State supplied', 500);
+            break;
 		}
 	}
 
@@ -95,11 +102,19 @@ class RegistrationChecker extends Controller {
 			$expiryResults = $apiExpiryBody->filter('div.licensing-big-form .data')->eq(1);
 
 			if (count($expiryResults) == 0) {
-				if ($apiExpiryBody->filter('.section-body p strong span')->first()->text()) {
-                    throw new ApiErrorException(sprintf('Unable to locate plate "%s"', $plate), 500);
-				} else {
+//				if ($apiExpiryBody->filter('.section-body p strong span')->first()->text()) {
+//                    throw new ApiErrorException(sprintf('Unable to locate plate "%s"', $plate), 500);
+//				} else {
+//                    throw new ApiErrorException('Unable to scrape registration details from DoT', 500);
+//				}
+
+                try {
+                    $apiExpiryBody->filter('.section-body p strong span')->first()->text();
+                } catch (InvalidArgumentException $e) {
                     throw new ApiErrorException('Unable to scrape registration details from DoT', 500);
-				}
+                }
+
+                Log::info('Unable to locate plate?');
 			} else {
 				$expiryResults = $expiryResults->text();
 			}
@@ -110,7 +125,12 @@ class RegistrationChecker extends Controller {
                 return new ApiWarningException('Invalid data scraped from DoT', 500);
             }
 
-			return ['status' => 'success', 'message' => sprintf('Plate expires on %s', $expiryResults)];
+            Debugbar::info('Success, plate expires ' . $expiryResults);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => sprintf('Plate expires on %s', $expiryResults)
+            ]);
 		} else {
 			throw new ApiErrorException('An unknown error occurred', 500);
 		}
