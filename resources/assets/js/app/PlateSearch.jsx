@@ -20,7 +20,10 @@ define(['react', 'jquery', 'jsx!Alert', 'jsx!PlateNotify'], function (React, $, 
                             return xhr.setRequestHeader('X-XSRF-TOKEN', token);
                         }
                     },
-                    data: plate
+                    data: {
+                        state: 'wa',
+                        plate: plate
+                    }
                 }).done(function (data) {
                     currentPlate = plate.plate;
 
@@ -29,10 +32,17 @@ define(['react', 'jquery', 'jsx!Alert', 'jsx!PlateNotify'], function (React, $, 
                         type: data.response.status
                     });
                 }).fail(function (xhr, status, err) {
-                    that.setState({
-                        response: xhr.responseJSON.message,
-                        type: xhr.responseJSON.type
-                    });
+                    if (typeof xhr.responseJSON != "undefined") {
+                        that.setState({
+                            response: xhr.responseJSON.message,
+                            type: xhr.responseJSON.type
+                        });
+                    } else {
+                        that.setState({
+                            response: 'Unknown error occured',
+                            type: 'error'
+                        });
+                    }
                 });
             });
         },
