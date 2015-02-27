@@ -92,6 +92,7 @@ form {
   background-color: transparent;
   border: 2px solid transparent;
   @include transition(background-color .3s linear, border-color .3s linear, color .3s linear);
+  @include margin(10px null);
 
   // Styles from Bootstrap - http://getbootstrap.com/components/
   &.success {
