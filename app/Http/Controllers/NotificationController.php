@@ -1,16 +1,25 @@
 <?php namespace App\Http\Controllers;
 
-use Controller;
-use Validator;
-use Crypt;
 use Log;
-use Illuminate\Http\Request;
+use Crypt;
+use Debugbar;
+use Validator;
 use App\Email;
 use App\Plate;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use App\Exceptions\ApiErrorException;
-use Debugbar;
 
-class Notification extends Controller {
+/**
+ * Class NotificationController
+ * @package App\Http\Controllers
+ */
+class NotificationController extends Controller {
+    /**
+     * @param Request $request
+     * @return array
+     * @throws ApiErrorException
+     */
     public function subscribe(Request $request) {
         $validator = Validator::make($request->all(), [
             'email' => [
