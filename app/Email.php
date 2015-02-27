@@ -15,7 +15,7 @@ class Email extends Model {
     /**
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = true;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
