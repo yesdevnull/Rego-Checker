@@ -15,20 +15,8 @@ Route::group(['prefix' => 'api'], function() {
             return 'hello';
         });
 
-        Route::post('/plate', function() {
-            $checker = new App\Http\Controllers\RegistrationChecker;
+        Route::post('/plate', 'RegistrationController@plateCheck');
 
-            $plateCheck = $checker->plateCheck('wa', Input::get('plate'));
-
-            return response()->json(['response' => $plateCheck]);
-        });
-
-        Route::post('/subscribe', function(Request $request) {
-            $notification = new App\Http\Controllers\Notification;
-
-            $result = $notification->subscribe($request);
-
-            return response()->json(['response' => $result]);
-        });
+        Route::post('/subscribe', 'NotificationController@subscribe');
     });
 });
