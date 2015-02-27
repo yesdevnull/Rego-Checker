@@ -46,14 +46,16 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
                         plate: plate
                     }
                 }).done(function (data) {
-                    console.log(data);
                     that.setState({
                         response: data.response.message,
                         type: data.response.type
                     });
                 }).fail(function (xhr, status, err) {
-                    // xhr
-                    console.log(xhr);
+                    // console.log(xhr);
+                    that.setState({
+                        response: xhr.responseJSON.message,
+                        type: xhr.responseJSON.type
+                    });
                 });
             });
         },
@@ -73,9 +75,6 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
 
     var PlateNotifyResponse = React.createClass({
         render: function () {
-            console.log(this.props.type);
-            console.log(this.props.response);
-
             return (
                 <Alert type={this.props.type} inputClasses={this.props.type}>{this.props.response}</Alert>
             );
