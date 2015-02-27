@@ -51,7 +51,7 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
                         type: data.response.type
                     });
                 }).fail(function (xhr, status, err) {
-                    // console.log(xhr);
+                    console.log(xhr);
                     that.setState({
                         response: xhr.responseJSON.message,
                         type: xhr.responseJSON.type
