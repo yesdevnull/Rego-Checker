@@ -81,6 +81,8 @@ class RegistrationController extends Controller {
 			throw new ApiErrorException('Did not receive valid session', 500);
 		}
 
+        Log::info('Session ID: ' . $sessionId);
+
 		$apiResponse = '';
 
 		try {
@@ -100,21 +102,18 @@ class RegistrationController extends Controller {
 			$apiExpiryBody = new Crawler($apiResponseBody->getContents());
 
 			$expiryResults = $apiExpiryBody->filter('div.licensing-big-form .data')->eq(1);
+            //$expiryResults = $apiExpiryBody->filter('div.licensing-big-form')->html();
+
+            //dd($expiryResults);
 
 			if (count($expiryResults) == 0) {
-//				if ($apiExpiryBody->filter('.section-body p strong span')->first()->text()) {
-//                    throw new ApiErrorException(sprintf('Unable to locate plate "%s"', $plate), 500);
-//				} else {
-//                    throw new ApiErrorException('Unable to scrape registration details from DoT', 500);
-//				}
-
-                try {
+                if ($apiExpiryBody->filter('.section-body p strong span')->count()) {
                     $apiExpiryBody->filter('.section-body p strong span')->first()->text();
-                } catch (InvalidArgumentException $e) {
+
+                    throw new ApiErrorException(sprintf('Unable to locate plate "%s"', $plate), 500);
+                } else {
                     throw new ApiErrorException('Unable to scrape registration details from DoT', 500);
                 }
-
-                Log::info('Unable to locate plate?');
 			} else {
 				$expiryResults = $expiryResults->text();
 			}
