@@ -13,8 +13,7 @@ class Notification extends Controller {
         $validator = Validator::make($request->all(), [
             'email' => [
                 'required',
-                'email',
-                'unique:emails'
+                'email'
             ],
             'plate' => [
                 'required',
