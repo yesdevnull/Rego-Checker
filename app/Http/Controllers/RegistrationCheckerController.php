@@ -5,11 +5,11 @@ use Debugbar;
 use Controller;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use GuzzleHttp\Cookie\CookieJar;
 use App\Exceptions\ApiErrorException;
 use App\Exceptions\ApiWarningException;
 use Symfony\Component\DomCrawler\Crawler;
 use GuzzleHttp\Exception\RequestException;
-use Symfony\Component\Security\Core\Exception\InvalidArgumentException;
 
 /**
  * Class RegistrationController
@@ -38,6 +38,7 @@ class RegistrationController extends Controller {
     /**
      * @param Request $request
      * @return ApiWarningException|array
+     * @throws ApiErrorException
      */
     public function plateCheck(Request $request) {
         return $this->stateSwitch($request->input('state'), $request->input('plate'));
@@ -63,31 +64,36 @@ class RegistrationController extends Controller {
 
     /**
      * @param $plate
-     * @return ApiWarningException|array
+     * @return ApiWarningException|\Symfony\Component\HttpFoundation\Response
      * @throws ApiErrorException
      */
 	public function _waRegoCheck($plate) {
-		$sessionRequest = $this->webClient->createRequest('GET', 'https://online.transport.wa.gov.au/webExternal/registration/?');
+        $cookieJar = new CookieJar();
 
-		$sessionResponse = $this->webClient->send($sessionRequest);
+        $sessionResponse = $this->webClient->get('https://online.transport.wa.gov.au/webExternal/registration/', [
+            'cookies' => $cookieJar
+        ]);
 
 		$sessionBody = $sessionResponse->getBody();
 
 		$sessionSite = new Crawler($sessionBody->getContents());
 
-		$sessionId = substr($sessionSite->filter('div.licensing-big-form form')->attr('action'), 1);
+		$sessionUrlRaw = substr($sessionSite->filter('div.licensing-big-form form')->attr('action'), 1);
 
-		if (!preg_match('#jsessionid#', $sessionId)) {
+		if (!preg_match('#jsessionid#', $sessionUrlRaw)) {
 			throw new ApiErrorException('Did not receive valid session', 500);
 		}
 
-        Log::info('Session ID: ' . $sessionId);
+        $sessionUrl = explode('?', $sessionUrlRaw);
 
 		$apiResponse = '';
 
 		try {
-			$apiResponse = $this->apiClient->post('https://online.transport.wa.gov.au/webExternal/registration' . $sessionId, [
-				'query' => ['plate' => $plate]
+			$apiResponse = $this->apiClient->post('https://online.transport.wa.gov.au/webExternal/registration/?' . $sessionUrl[1], [
+				'query' => [
+                    'plate' => $plate,
+                ],
+                'cookies' => $cookieJar
 			]);
 		} catch (RequestException $e) {
 			if ($e->hasResponse()) {
@@ -102,9 +108,6 @@ class RegistrationController extends Controller {
 			$apiExpiryBody = new Crawler($apiResponseBody->getContents());
 
 			$expiryResults = $apiExpiryBody->filter('div.licensing-big-form .data')->eq(1);
-            //$expiryResults = $apiExpiryBody->filter('div.licensing-big-form')->html();
-
-            //dd($expiryResults);
 
 			if (count($expiryResults) == 0) {
                 if ($apiExpiryBody->filter('.section-body p strong span')->count()) {
@@ -123,8 +126,6 @@ class RegistrationController extends Controller {
             } elseif (!preg_match('/[0-3][0-9]\/[0-1][0-9]\/[1-2][0-9]{3}/i', $expiryResults)) {
                 return new ApiWarningException('Invalid data scraped from DoT', 500);
             }
-
-            Debugbar::info('Success, plate expires ' . $expiryResults);
 
             return response()->json([
                 'status' => 'success',

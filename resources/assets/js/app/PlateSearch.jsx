@@ -25,11 +25,11 @@ define(['react', 'jquery', 'jsx!Alert', 'jsx!PlateNotify'], function (React, $, 
                         plate: plate
                     }
                 }).done(function (data) {
-                    currentPlate = plate.plate;
+                    currentPlate = plate;
 
                     that.setState({
-                        response: data.response.message,
-                        type: data.response.status
+                        response: data.message,
+                        type: data.status
                     });
                 }).fail(function (xhr, status, err) {
                     console.log(xhr);
@@ -79,7 +79,7 @@ define(['react', 'jquery', 'jsx!Alert', 'jsx!PlateNotify'], function (React, $, 
                 return;
             }
 
-            this.props.onPlateSubmit({ plate: plateNumber });
+            this.props.onPlateSubmit(plateNumber);
             previousPlate = plateNumber;
         },
         render: function () {
