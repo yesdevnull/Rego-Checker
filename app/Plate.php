@@ -18,6 +18,17 @@ class Plate extends Model {
     public $timestamps = true;
 
     /**
+     * @var array
+     */
+    protected $status = [
+        0   => 'Unknown',
+        1   => 'Searched',
+        2   => 'In-Date',
+        3   => 'Expired',
+        99  => 'Invalid',
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function emails() {
