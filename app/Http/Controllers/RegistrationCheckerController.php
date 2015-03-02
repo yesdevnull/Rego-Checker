@@ -67,7 +67,7 @@ class RegistrationController extends Controller {
      * @return ApiWarningException|\Symfony\Component\HttpFoundation\Response
      * @throws ApiErrorException
      */
-	public function _waRegoCheck($plate) {
+	public function _waRegoCheck($plate, $ajax = true) {
         // Set up the cookies *cookie monster voice*
         $cookieJar = new CookieJar();
 
@@ -139,10 +139,18 @@ class RegistrationController extends Controller {
 
             Log::info('Successful search for in-date plate');
             // If we get this far, everything has succeeded
-            return response()->json([
-                'status' => 'success',
-                'message' => sprintf('Plate expires on %s', $expiryResults)
-            ]);
+
+            if ($ajax) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => sprintf('Plate expires on %s', $expiryResults)
+                ]);
+            } else {
+                return [
+                    'status' => 'success',
+                    'message' => sprintf('Plate expires on %s', $expiryResults)
+                ];
+            }
 		} else {
             // API Response wasn't an object, something pretty weird happened
             Log::error('Unknown error occurred with $apiResponse');
