@@ -2,7 +2,9 @@
 
 use Log;
 use Debugbar;
+use App\Plate;
 use Controller;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use GuzzleHttp\Cookie\CookieJar;
@@ -68,6 +70,31 @@ class RegistrationController extends Controller {
      * @throws ApiErrorException
      */
 	public function _waRegoCheck($plate, $ajax = true) {
+        // Do a quick search to see if we've already successfully crawled this plate
+        $existingPlate = Plate::where('plate', '=', $plate, 'and')->where('status', '=', 2)->get();
+
+        if (count($existingPlate) > 0) {
+            // Plate exists!
+            $lastSearch = Carbon::createFromFormat('Y-m-d H:i:s', $existingPlate->first()->last_searched);
+            $now = Carbon::now();
+
+            // If the successful crawl was in the last 24 hours, we'll use it, otherwise, continue and move to normal crawl
+            if ($lastSearch->diffInHours($now) <= 24) {
+                Log::info(sprintf('Used cache for plate %s', $existingPlate->first()->plate));
+                if ($ajax) {
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => sprintf('Plate expires on %s', $existingPlate->first()->status_text)
+                    ]);
+                } else {
+                    return [
+                        'status' => 'success',
+                        'message' => sprintf('Plate expires on %s', $existingPlate->first()->status_text)
+                    ];
+                }
+            }
+        }
+
         // Set up the cookies *cookie monster voice*
         $cookieJar = new CookieJar();
 
