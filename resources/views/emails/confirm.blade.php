@@ -1,0 +1,1 @@
+Click <a href="{{ action('NotificationController@confirm', ['email' => $email, 'token' => $token]) }}">here</a> to activate your account.

@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use Log;
+use Mail;
 use Crypt;
 use Debugbar;
 use Validator;
@@ -73,7 +74,7 @@ class NotificationController extends Controller {
                 $email->email = $request->input('email');
                 $email->enabled = true;
                 // Just need a random string for the email confirmation token
-                $email->token = Crypt::encrypt($request->input('email'));
+                $email->token = substr(Crypt::encrypt($request->input('email')), 0, 40);
 
                 // Save the Email Model
                 $email->save();
@@ -101,6 +102,9 @@ class NotificationController extends Controller {
             // Link Plate to Email
             $email->plates()->save($plate);
 
+            // Get this queued up for email
+            $this->_queueMail($email->email, $email->token);
+
             Log::info('Saved email and plate to database');
 
             return response()->json([
@@ -108,6 +112,46 @@ class NotificationController extends Controller {
                 'message' => 'Successfully subscribed to notifications.  Please check your inbox to confirm your email address'
             ]);
         }
+    }
+
+    public function confirm(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'email' => [
+                'required',
+                'email'
+            ],
+            'token' => [
+                'required'
+            ]
+        ]);
+
+        if ($validator->fails()) {
+
+        } else {
+            $confirmation = Email::where('email', '=', $request->input('email'), 'and')->where('token', '=', $request->input('token'))->first();
+
+            if (count($confirmation) > 0) {
+                // The user and token match, set them as confirmed
+                $confirmation->confirmed = true;
+
+                $confirmation->save();
+            } else {
+
+            }
+
+            dd($confirmation);
+        }
+    }
+
+    public function _queueMail($email, $token) {
+        $data = [
+            'email' => $email,
+            'token' => $token
+        ];
+
+        Mail::queue('emails.confirm', $data, function($message) use ($email) {
+            $message->to($email)->subject('Confirm your Email');
+        });
     }
 
     // https://mailtrap.io/

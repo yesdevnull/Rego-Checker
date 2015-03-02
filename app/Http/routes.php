@@ -9,6 +9,8 @@ Route::get('/', function()
     return view('home')->withEncryptedCsrfToken($encrypted_csrf_token);
 });
 
+Route::get('/confirm', 'NotificationController@confirm');
+
 Route::group(['prefix' => 'api'], function() {
     Route::group(['prefix' => 'v1'], function() {
         Route::get('/', function() {
