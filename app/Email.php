@@ -30,4 +30,18 @@ class Email extends Model {
     public function isEnabled() {
         return ($this->enabled == 1) ? true : false;
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfirmed() {
+        return ($this->confirmed == 1) ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabledAndConfirmed() {
+        return ($this->isConfirmed() && $this->isEnabled());
+    }
 }
