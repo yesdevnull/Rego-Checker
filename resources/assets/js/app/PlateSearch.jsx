@@ -40,7 +40,7 @@ define(['react', 'jquery', 'jsx!Alert', 'jsx!PlateNotify'], function (React, $, 
                         });
                     } else {
                         that.setState({
-                            response: 'Unknown error occured',
+                            response: 'Unknown error occurred',
                             type: 'error'
                         });
                     }

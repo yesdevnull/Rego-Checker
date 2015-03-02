@@ -46,9 +46,11 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
                         plate: plate
                     }
                 }).done(function (data) {
+                    console.log(data);
+                    
                     that.setState({
-                        response: data.response.message,
-                        type: data.response.type
+                        response: data.message,
+                        type: data.type
                     });
                 }).fail(function (xhr, status, err) {
                     console.log(xhr);
