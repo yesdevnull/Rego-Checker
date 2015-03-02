@@ -114,11 +114,14 @@ class NotificationController extends Controller {
         }
     }
 
+    /**
+     * @param Request $request
+     * @return $this
+     */
     public function confirm(Request $request) {
         $validator = Validator::make($request->all(), [
             'email' => [
-                'required',
-                'email'
+                'required'
             ],
             'token' => [
                 'required'
@@ -128,7 +131,7 @@ class NotificationController extends Controller {
         if ($validator->fails()) {
             return view('confirm')->withErrors($validator);
         } else {
-            $confirmation = Email::where('email', '=', $request->input('email'), 'and')->where('token', '=', $request->input('token'))->first();
+            $confirmation = Email::where('email', '=', Crypt::decrypt($request->input('email')), 'and')->where('token', '=', $request->input('token'))->first();
 
             if (count($confirmation) > 0) {
                 if ($confirmation->confirmed) {
@@ -153,7 +156,7 @@ class NotificationController extends Controller {
      */
     public function _queueMail($email, $token) {
         $data = [
-            'email' => $email,
+            'email' => Crypt::encrypt($email),
             'token' => $token
         ];
 
