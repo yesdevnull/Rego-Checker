@@ -35,6 +35,7 @@ class PlateCrawlerController extends Controller {
 
     public function searchPlate(Plate $plate) {
         $checkerController = new RegistrationController();
+        $notificationController = new NotificationController();
 
         switch ($plate->state) {
             case 'WA' :
@@ -45,6 +46,10 @@ class PlateCrawlerController extends Controller {
 
                     $plate->status_text = $date[0];
                     $plate->status = $plate->status_list[$result['status']];
+
+                    if ($notificationController->checkDates($date[0])) {
+                        $notificationController->sendAlertEmail($plate);
+                    }
 
                     Log::info(sprintf('In-date status for plate %s', $plate->plate));
                 } elseif ($result['status'] == 'warning' && preg_match('#unregistered#i', $result['message'])) {

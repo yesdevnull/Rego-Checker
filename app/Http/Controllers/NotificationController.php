@@ -7,6 +7,7 @@ use Debugbar;
 use Validator;
 use App\Email;
 use App\Plate;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Exceptions\ApiErrorException;
@@ -148,6 +149,32 @@ class NotificationController extends Controller {
                 return view('confirm')->with('error', 'Token does not match email address');
             }
         }
+    }
+
+    /**
+     * @param $expiry
+     * @return bool
+     */
+    public function checkDates($expiry) {
+        $now = Carbon::now();
+        $expiryNormalised = Carbon::createFromFormat('d/m/Y', $expiry);
+
+        return ($expiryNormalised->diffInDays($now) < 31) ? true : false;
+    }
+
+    /**
+     * @param Plate $plate
+     */
+    public function sendAlertEmail(Plate $plate) {
+        $emails = Email::whereHas('plates', function($query) use ($plate) {
+            $query->where('plate', '=', $plate->plate);
+        })->get();
+
+        $emails->each(function($email) use ($plate) {
+            Mail::queue('emails.expiring', ['plate' => $plate->plate], function($message) use ($email) {
+                $message->to($email->email)->subject('Expiring Plate');
+            });
+        });
     }
 
     /**
