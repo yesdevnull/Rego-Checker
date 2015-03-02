@@ -19,3 +19,4 @@ resources/assets/js/lib/*.js
 .sass-cache
 build/**/
 .env
+config/services.php
