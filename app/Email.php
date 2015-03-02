@@ -23,4 +23,11 @@ class Email extends Model {
     public function plates() {
         return $this->belongsToMany('App\Plate');
     }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled() {
+        return ($this->enabled == 1) ? true : false;
+    }
 }
