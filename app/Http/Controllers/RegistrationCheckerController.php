@@ -68,8 +68,10 @@ class RegistrationController extends Controller {
      * @throws ApiErrorException
      */
 	public function _waRegoCheck($plate) {
+        // Set up the cookies *cookie monster voice*
         $cookieJar = new CookieJar();
 
+        // Get form page and cookie
         $sessionResponse = $this->webClient->get('https://online.transport.wa.gov.au/webExternal/registration/', [
             'cookies' => $cookieJar
         ]);
@@ -78,15 +80,18 @@ class RegistrationController extends Controller {
 
 		$sessionSite = new Crawler($sessionBody->getContents());
 
+        // Get the action property from the form element
 		$sessionUrlRaw = substr($sessionSite->filter('div.licensing-big-form form')->attr('action'), 1);
 
+        // The action property should contain a Session ID and form query string for our matching Session ID
 		if (!preg_match('#jsessionid#', $sessionUrlRaw)) {
 			throw new ApiErrorException('Did not receive valid session', 500);
 		}
 
+        // Need to grab the form query string parameter, split the action and grab the 2nd half
         $sessionUrl = explode('?', $sessionUrlRaw);
 
-		$apiResponse = '';
+		$apiResponse = null;
 
 		try {
 			$apiResponse = $this->apiClient->post('https://online.transport.wa.gov.au/webExternal/registration/?' . $sessionUrl[1], [
@@ -97,41 +102,50 @@ class RegistrationController extends Controller {
 			]);
 		} catch (RequestException $e) {
 			if ($e->hasResponse()) {
+                // Unknown error with POST to API, log and alert
 				Log::error($e->getResponse());
                 throw new ApiErrorException('Unknown query error occurred', 500);
 			}
 		}
 
+        // API Response should be an object, if it isn't, throw ApiErrorException
 		if (is_object($apiResponse)) {
 			$apiResponseBody = $apiResponse->getBody();
 
 			$apiExpiryBody = new Crawler($apiResponseBody->getContents());
 
+            // Crawl API Response page for the form response data
 			$expiryResults = $apiExpiryBody->filter('div.licensing-big-form .data')->eq(1);
 
+            // There should be at least 1 result in the $expiryResults DomCrawler filter
 			if (count($expiryResults) == 0) {
+                // If the response didn't match what we were expecting, the plate has been returned because it doesn't exist
                 if ($apiExpiryBody->filter('.section-body p strong span')->count()) {
-                    $apiExpiryBody->filter('.section-body p strong span')->first()->text();
-
                     throw new ApiErrorException(sprintf('Unable to locate plate "%s"', $plate), 500);
                 } else {
+                    // If we made it to here, the response we got was completely messed up, abort!
                     throw new ApiErrorException('Unable to scrape registration details from DoT', 500);
                 }
 			} else {
 				$expiryResults = $expiryResults->text();
 			}
 
+            // Response string should either contain a date or the unregistered keyword
 			if (preg_match('#unregistered#', $expiryResults)) {
                 return new ApiWarningException(sprintf('Plate "%s" is unregistered, expired, suspended or cancelled', $plate), 500);
             } elseif (!preg_match('/[0-3][0-9]\/[0-1][0-9]\/[1-2][0-9]{3}/i', $expiryResults)) {
                 return new ApiWarningException('Invalid data scraped from DoT', 500);
             }
 
+            Log::info('Successful search for in-date plate');
+            // If we get this far, everything has succeeded
             return response()->json([
                 'status' => 'success',
                 'message' => sprintf('Plate expires on %s', $expiryResults)
             ]);
 		} else {
+            // API Response wasn't an object, something pretty weird happened
+            Log::error('Unknown error occurred with $apiResponse');
 			throw new ApiErrorException('An unknown error occurred', 500);
 		}
 	}
