@@ -126,23 +126,31 @@ class NotificationController extends Controller {
         ]);
 
         if ($validator->fails()) {
-
+            return view('confirm')->withErrors($validator);
         } else {
             $confirmation = Email::where('email', '=', $request->input('email'), 'and')->where('token', '=', $request->input('token'))->first();
 
             if (count($confirmation) > 0) {
-                // The user and token match, set them as confirmed
-                $confirmation->confirmed = true;
+                if ($confirmation->confirmed) {
+                    return view('confirm')->with('warning', 'Email address already confirmed');
+                } else {
+                    // The user and token match, set them as confirmed
+                    $confirmation->confirmed = true;
 
-                $confirmation->save();
+                    $confirmation->save();
+
+                    return view('confirm')->with('success', 'Successfully confirmed token and email address');
+                }
             } else {
-
+                return view('confirm')->with('error', 'Token does not match email address');
             }
-
-            dd($confirmation);
         }
     }
 
+    /**
+     * @param $email
+     * @param $token
+     */
     public function _queueMail($email, $token) {
         $data = [
             'email' => $email,
