@@ -159,6 +159,7 @@ class NotificationController extends Controller {
         $now = Carbon::now();
         $expiryNormalised = Carbon::createFromFormat('d/m/Y', $expiry);
 
+        // Replace below with return true; to test the expiry emails
         return ($expiryNormalised->diffInDays($now) < 31) ? true : false;
     }
 
@@ -170,7 +171,13 @@ class NotificationController extends Controller {
             $query->where('plate', '=', $plate->plate);
         })->get();
 
+        $emails = $emails->filter(function($email) {
+            return $email->isEnabledAndConfirmed();
+        });
+        
         $emails->each(function($email) use ($plate) {
+            Log::info(sprintf('Sending alert to %s', $email->email));
+
             Mail::queue('emails.expiring', ['plate' => $plate->plate], function($message) use ($email) {
                 $message->to($email->email)->subject('Expiring Plate');
             });
