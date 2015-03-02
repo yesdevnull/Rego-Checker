@@ -54,7 +54,7 @@ class NotificationController extends Controller {
 
                 // If the email address exists in that list, they have already subscribed to this plate/email alert
                 if (count($sameEmail) > 0) {
-                    throw new ApiErrorException('This email address and plate are already subscribed.', 500);
+                    throw new ApiErrorException('This email address and plate are already subscribed', 500);
                 }
             }
 
