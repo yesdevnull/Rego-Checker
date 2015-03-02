@@ -47,6 +47,7 @@ class PlateCrawlerController extends Controller {
                     $plate->status_text = $date[0];
                     $plate->status = $plate->status_list[$result['status']];
 
+                    // If the plate has less than 30 days until it expires, alert the email addresses assigned to that plate
                     if ($notificationController->checkDates($date[0])) {
                         $notificationController->sendAlertEmail($plate);
                     }
