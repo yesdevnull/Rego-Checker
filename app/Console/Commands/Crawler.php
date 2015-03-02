@@ -7,7 +7,6 @@ use App\Http\Controllers\PlateCrawlerController;
 use Symfony\Component\Console\Input\InputArgument;
 
 class Crawler extends Command {
-
     /**
      * The console command name.
      *
@@ -35,5 +34,4 @@ class Crawler extends Command {
 
         $crawler->initiateCrawler();
     }
-
 }
