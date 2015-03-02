@@ -54,7 +54,7 @@ return [
 	|
 	*/
 
-	'from' => ['address' => null, 'name' => null],
+	'from' => ['address' => 'work@danbarrett.com.au', 'name' => 'Rego Checker'],
 
 	/*
 	|--------------------------------------------------------------------------
