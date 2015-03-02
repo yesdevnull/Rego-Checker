@@ -1,6 +1,6 @@
 <?php namespace App\Commands;
 
-use Queue;
+use Log;
 use App\Plate;
 use App\Commands\Command;
 use Illuminate\Queue\SerializesModels;
@@ -12,28 +12,21 @@ use App\Http\Controllers\PlateCrawlerController;
 class CrawlPlates extends Command implements SelfHandling, ShouldBeQueued {
 	use InteractsWithQueue, SerializesModels;
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct() {
-        //
-	}
+    protected $plate;
 
-	/**
-	 * Execute the command.
-	 *
-	 * @return void
-	 */
+    /**
+     * @param Plate $plate
+     */
+	public function __construct(Plate $plate) {
+        $this->plate = $plate;
+    }
+
+    /**
+     * @param Plate $plate
+     */
 	public function handle() {
-		$plates = Plate::all();
         $crawler = new PlateCrawlerController();
 
-        $plates->each(function($plate) use ($crawler) {
-            $crawler->searchPlate($plate);
-
-            Queue::push($crawler->searchPlate($plate));
-        });
+        $crawler->searchPlate($this->plate);
 	}
 }

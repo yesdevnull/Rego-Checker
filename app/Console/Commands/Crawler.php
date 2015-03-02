@@ -1,8 +1,9 @@
 <?php namespace App\Console\Commands;
 
-use App\Commands\CrawlPlates;
+use Log;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
+use App\Http\Controllers\PlateCrawlerController;
 use Symfony\Component\Console\Input\InputArgument;
 
 class Crawler extends Command {
@@ -28,9 +29,11 @@ class Crawler extends Command {
      */
     public function handle()
     {
-        $crawler = new CrawlPlates();
+        Log::info('Running crawler...');
 
-        $crawler->handle();
+        $crawler = new PlateCrawlerController();
+
+        $crawler->initiateCrawler();
     }
 
 }

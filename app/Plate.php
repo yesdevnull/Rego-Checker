@@ -20,12 +20,14 @@ class Plate extends Model {
     /**
      * @var array
      */
-    protected $status = [
+    public $status_list = [
         0   => 'Unknown',
         1   => 'Searched',
         2   => 'In-Date',
         3   => 'Expired',
         99  => 'Invalid',
+
+        'success' => 2
     ];
 
     /**
