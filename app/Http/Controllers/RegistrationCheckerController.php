@@ -98,15 +98,18 @@ class RegistrationController extends Controller {
             if ($lastSearch->diffInHours($now) <= 24) {
                 Log::info(sprintf('Used cache for plate %s', $existingPlate->first()->plate));
 
+                $expiryDate = Carbon::createFromFormat('d/m/Y', $existingPlate->first()->status_text);
+                $diffForHumans = $expiryDate->diffForHumans(Carbon::now(), true);
+
                 if ($ajax) {
                     return response()->json([
                         'status' => 'success',
-                        'message' => sprintf('Plate expires on %s', $existingPlate->first()->status_text)
+                        'message' => sprintf('Plate expires on %s (%s from now)', $existingPlate->first()->status_text, $diffForHumans)
                     ]);
                 } else {
                     return [
                         'status' => 'success',
-                        'message' => sprintf('Plate expires on %s', $existingPlate->first()->status_text)
+                        'message' => sprintf('Plate expires on %s (%s from now)', $existingPlate->first()->status_text, $diffForHumans)
                     ];
                 }
             }
@@ -181,18 +184,21 @@ class RegistrationController extends Controller {
                 return new ApiWarningException('Invalid data scraped from DoT', 500);
             }
 
-            Log::info('Successful search for in-date plate');
+            Log::info(sprintf('Successful search for in-date plate %s', $plate));
             // If we get this far, everything has succeeded
+
+            $expiryDate = Carbon::createFromFormat('d/m/Y', $expiryResults);
+            $diffForHumans = $expiryDate->diffForHumans(Carbon::now(), true);
 
             if ($ajax) {
                 return response()->json([
                     'status' => 'success',
-                    'message' => sprintf('Plate expires on %s', $expiryResults)
+                    'message' => sprintf('Plate expires on %s (%s from now)', $plate, $diffForHumans)
                 ]);
             } else {
                 return [
                     'status' => 'success',
-                    'message' => sprintf('Plate expires on %s', $expiryResults)
+                    'message' => sprintf('Plate expires on %s (%s from now)', $plate, $diffForHumans)
                 ];
             }
 		} else {
