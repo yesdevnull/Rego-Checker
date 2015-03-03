@@ -103,15 +103,25 @@ class NotificationController extends Controller {
             // Link Plate to Email
             $email->plates()->save($plate);
 
-            // Get this queued up for email
-            $this->_queueMail($email->email, $email->token);
+            // If the email address already exists and is confirmed, don't send another confirmation email
+            if ($email->isConfirmed()) {
+                Log::info('Email exists, but saved plate to database');
 
-            Log::info('Saved email and plate to database');
+                return response()->json([
+                    'type' => 'success',
+                    'message' => sprintf('Successfully enabled notifications for plate %s', $plate->plate)
+                ]);
+            } else {
+                // Get this queued up for email
+                $this->_queueMail($email->email, $email->token);
 
-            return response()->json([
-                'type' => 'success',
-                'message' => 'Successfully subscribed to notifications.  Please check your inbox to confirm your email address'
-            ]);
+                Log::info('Saved email and plate to database');
+
+                return response()->json([
+                    'type' => 'success',
+                    'message' => 'Successfully subscribed to notifications.  Please check your inbox to confirm your email address'
+                ]);
+            }
         }
     }
 
@@ -174,7 +184,7 @@ class NotificationController extends Controller {
         $emails = $emails->filter(function($email) {
             return $email->isEnabledAndConfirmed();
         });
-        
+
         $emails->each(function($email) use ($plate) {
             Log::info(sprintf('Sending alert to %s', $email->email));
 
