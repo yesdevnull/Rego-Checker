@@ -179,9 +179,9 @@ class RegistrationController extends Controller {
 
             // Response string should either contain a date or the unregistered keyword
 			if (preg_match('#unregistered#', $expiryResults)) {
-                return new ApiWarningException(sprintf('Plate "%s" is unregistered, expired, suspended or cancelled', $plate), 500);
+                throw new ApiWarningException(sprintf('Plate "%s" is unregistered, expired, suspended or cancelled', $plate), 500);
             } elseif (!preg_match('/[0-3][0-9]\/[0-1][0-9]\/[1-2][0-9]{3}/i', $expiryResults)) {
-                return new ApiWarningException('Invalid data scraped from DoT', 500);
+                throw new ApiWarningException('Invalid data scraped from DoT', 500);
             }
 
             Log::info(sprintf('Successful search for in-date plate %s', $plate));
