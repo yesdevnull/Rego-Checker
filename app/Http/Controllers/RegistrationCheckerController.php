@@ -71,16 +71,33 @@ class RegistrationController extends Controller {
      */
 	public function _waRegoCheck($plate, $ajax = true) {
         // Do a quick search to see if we've already successfully crawled this plate
-        $existingPlate = Plate::where('plate', '=', $plate, 'and')->where('status', '=', 2)->get();
+        $existingPlate = Plate::withTrashed()->where('plate', '=', $plate, 'and')->where('status', '=', 2)->get();
 
         if (count($existingPlate) > 0) {
             // Plate exists!
+            if ($existingPlate->first()->trashed()) {
+                Log::info(sprintf('Trashed plate %s searched for', $plate));
+
+                if ($ajax) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => sprintf('Previously invalid plate %s scraped', $plate)
+                    ]);
+                } else {
+                    return [
+                        'status' => 'error',
+                        'message' => sprintf('Previously invalid plate %s scraped', $plate)
+                    ];
+                }
+            }
+
             $lastSearch = Carbon::createFromFormat('Y-m-d H:i:s', $existingPlate->first()->last_searched);
             $now = Carbon::now();
 
             // If the successful crawl was in the last 24 hours, we'll use it, otherwise, continue and move to normal crawl
             if ($lastSearch->diffInHours($now) <= 24) {
                 Log::info(sprintf('Used cache for plate %s', $existingPlate->first()->plate));
+
                 if ($ajax) {
                     return response()->json([
                         'status' => 'success',
