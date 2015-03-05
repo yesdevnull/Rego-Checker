@@ -62,6 +62,10 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
             });
         },
         render: function () {
+            if ((this.state.type != '') && (this.state.response != '')) {
+                var response = <PlateNotifyResponse response={this.state.response} type={this.state.type} />
+            }
+
             return (
                 <div>
                     <form onSubmit={this.handleSubmit}>
@@ -69,7 +73,7 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
                         <input type="hidden" ref="plate" value={this.props.plate} />
                         <input type="submit" value="Notify" />
                     </form>
-                    <PlateNotifyResponse response={this.state.response} type={this.state.type} />
+                    {response}
                 </div>
             );
         }
