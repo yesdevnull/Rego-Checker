@@ -31,7 +31,7 @@ define(['react', 'jquery', 'jsx!Alert', 'jsx!PlateNotify'], function (React, $, 
                         response: data.message,
                         type: data.status
                     });
-                }).fail(function (xhr, status, err) {
+                }).fail(function (xhr) {
                     console.log(xhr);
                     if (typeof xhr.responseJSON != "undefined") {
                         that.setState({
@@ -58,10 +58,14 @@ define(['react', 'jquery', 'jsx!Alert', 'jsx!PlateNotify'], function (React, $, 
                 var notify = <PlateNotify plate={currentPlate} />
             }
 
+            if ((this.state.type != '') && (this.state.response != '')) {
+                var response = <PlateSearchResponse response={this.state.response} type={this.state.type} />
+            }
+
             return (
                 <div className="box">
                     <PlateSearchForm onPlateSubmit={this.handlePlateSearch} />
-                    <PlateSearchResponse response={this.state.response} type={this.state.type} />
+                    {response}
                     {notify}
                 </div>
             );

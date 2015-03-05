@@ -15,6 +15,7 @@ define(['react', 'router', 'jsx!PlateSearch', 'jsx!PlateFooter'], function(React
                 <div>
                     <header>
                         <h1>Rego Checker</h1>
+                        <p>Search, and get alerted when your registration is about to expire</p>
                     </header>
 
                     <section className="content">

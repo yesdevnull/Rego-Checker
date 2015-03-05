@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 Route::get('/', function()
 {
     $encrypted_csrf_token = Crypt::encrypt(csrf_token());
