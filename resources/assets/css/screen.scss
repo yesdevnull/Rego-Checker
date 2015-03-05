@@ -40,6 +40,12 @@ header h1 {
   text-align: center;
   font-weight: 600;
   font-size: 24px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+p {
+  margin-bottom: 9px;
 }
 
 a {
@@ -61,17 +67,6 @@ strong {
   background-color: #ccc;
 }
 
-#nav {
-  @include span(full);
-  line-height: 40px;
-
-  li {
-    display: inline-block;
-    text-align: center;
-    width: 33.33333%;
-  }
-}
-
 .content {
   @include span(12);
   @include padding(30px null);
@@ -89,6 +84,15 @@ form {
   input {
     font-size: 18px;
 
+    &[type="submit"] {
+      border: 0 none;
+      border-radius: 0;
+      @include appearance(none);
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 }
 
