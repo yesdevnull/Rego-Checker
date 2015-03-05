@@ -31,7 +31,7 @@ define(['react', 'jquery', 'jsx!Alert', 'jsx!PlateNotify'], function (React, $, 
                         response: data.message,
                         type: data.status
                     });
-                }).fail(function (xhr, status, err) {
+                }).fail(function (xhr) {
                     console.log(xhr);
                     if (typeof xhr.responseJSON != "undefined") {
                         that.setState({

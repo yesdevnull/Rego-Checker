@@ -52,7 +52,7 @@ define(['react', 'jquery', 'jsx!Alert'], function (React, $, Alert) {
                         response: data.message,
                         type: data.type
                     });
-                }).fail(function (xhr, status, err) {
+                }).fail(function (xhr) {
                     console.log(xhr);
                     that.setState({
                         response: xhr.responseJSON.message,
